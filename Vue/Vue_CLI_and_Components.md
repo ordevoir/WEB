@@ -80,7 +80,7 @@ npm run serve
 
 # [Application](https://vuejs.org/guide/essentials/application.html)
 
-## [Создание приложения]
+## Создание приложения
 
 При создании **экземпляра приложения** (*applications instance*) функцией `createApp` (например, в файле `main.js`), первым аргументом передается **корневой компонент** (*root component*) (например, `App.vue`):
 
@@ -216,3 +216,16 @@ https://ru.vuejs.org/v2/guide/components-props.html#Валидация-вход�
 
 вызывать один action внутри другого action в самом store можно так:
 someAction(context) {context.dispatch('anotherAction')}
+
+
+# Установка приложений
+
+npm install --save axios vue-axios
+npm install --save mitt
+npm install vuex@next --save
+
+npm i --save @fortawesome/fontawesome-svg-core
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/vue-fontawesome@prerelease
+
+https://github.com/developit/mitt
