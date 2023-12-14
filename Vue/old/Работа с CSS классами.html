@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue JS</title>
+    <style>
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 1px solid gray;
+            display: inline-block;
+            margin: 40px;
+        }
+        .red {background: red;}
+        .blue {background: blue;}
+        .green {background: green;}
+        .shadow {box-shadow: gray 0 0 10px;}
+    </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- меняем значение переменной isActive на противоположное при клике: -->
+    <div 
+            class="circle"
+            @click="isActive = !isActive"
+            :class="{'red': isActive, 'green': !isActive}"
+    ></div>
+<!-- мы назначили класс circle, но так же мы забиндили еще объект, и теперь
+класс red будет присоединен к div при условии, что isActive == true и класс
+green, если isActive == false. Таким образом можно  присоединять любое
+количество классов -->
+
+<!-- альтернативным методом, и порой более удобным, будет передавать вместо
+объекта функцию, которая возвращает соответствующий объект:  -->
+    <div
+            class="circle"
+            @click="isActive = !isActive"
+            :class="getCssClasses"
+    ></div>
+
+    <!-- здесь мы добавляем класс по значению стринговой переменной: -->
+    <div class="circle" :class="color"></div>
+
+    <!-- добавляем класс, передавая массив, который содержит и стринговую
+         переменную и объект: -->
+    <div class="circle" :class="[color, {'red': isActive}]"></div>
+    <!-- при этом первый класс (color) приоритетнее последующего -->
+
+    <!-- можно добавить класс, используя тернаррный оператор: -->
+    <div class="circle" :class="[isActive ? 'red' : 'green', 'shadow']"></div>
+    <!-- при этом в зависимости от значения isActive будет добавлен класс 'red'
+    или 'green', класс 'shadow' будет добавлен в любом случае (не обязательно) -->
+      
+      <!-- вводя значение, мы будем менять значение переменной color: -->
+      <p>Color:</p><input type="text" v-model="color">
+      <p>Height:</p><input type="text" v-model="height">
+      
+    <hr>
+    
+    <!-- зададим непосредственно значение css-атрибута -->
+    <div class="circle" :style="{'background': color, 'height': height + 'px'}"></div>
+    <!-- теперь будут color указывает не класс, как в предыдущем кружке
+    а значение css-свойство, так что будет работать и такое #232-->
+
+    <!-- также вместо того, чтобы записывать объект в атрибут тега
+    часто целесообразнее записать фукцию, которая возвращает этот объект -->
+    <div class="circle" :style="circleClasses"></div>
+    <!-- можем передавать массив: -->
+    <div class="circle" :style="[circleClasses, {'width': height + 'px'}]"></div>
+    <!-- Здесь первый элемент массива - та же функция, что и для предыдущего
+      кружочка, второй элемент доплнительно меняет и свойство width куржочка -->
+    
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script>
+
+    new Vue({
+      el: '#app',
+      data: {
+        isActive: false,
+        color: 'blue',
+        height: 100,
+      },
+      computed: {
+        getCssClasses: function() {
+      /* метод возвращает объект, аналогичный тому, который мы биндили в первый кружок */
+          return {
+            'red': this.isActive,
+            'green': !this.isActive,
+            'shadow': this.height == 100,
+          }
+        },
+        circleClasses: function() {
+          return {
+            'background': this.color,
+            'height': this.height + 'px'
+          }
+        }
+      },
+      methods: {
+
+      }
+    })
+
+</script>
+</body>
+</html>

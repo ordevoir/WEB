@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue JS</title>
+</head>
+<body>
+
+<div id="app">
+    <ul>
+      <li><b>{{ women[0] }}</b></li> <!-- вывод элемента списка --><br>
+      <!-- вывод всех элементов списка директивой v-for: -->
+      <li v-for="woman in women">{{ woman }}</li>
+    </ul>
+
+    <ul>
+      <!-- индексированный вывод всех элементов списка: -->
+      <li v-for="(woman, ind) in women">{{ ind + 1 }} {{ woman }}</li>
+      <!-- + 1 для того, чтобы нумерация шла с 1 а не с 0 -->
+    </ul>
+
+    <ul>
+      <!-- индексированный вывод полей объектов, находящихся в списке -->
+        <li v-for="(person, index) of people">{{ index + 1 }}. {{ person.name }} - <b>{{ person.age }}</b></li>
+      <!-- вместо in допускается использование of (in и of равнозначны) -->
+    </ul>
+
+    <hr>
+
+    <ol><!-- нумерованный список -->
+      <!-- для того, чтобы вывести числа от 0 до 4, можно сделать так: -->
+        <li v-for="num of 4">{{ num }}</li>
+    </ol>
+
+    <hr>
+
+    <ul>
+      <!-- можем выводить данные определенного объекта; первым идут значения
+      полей, затем ключи, и потом третим параметром идут индексы полей -->
+        <li v-for="(value, key, index) in person"><em>{{ index + 1 }}</em> <b>{{ key }}</b> {{ value }}</li>
+    </ul>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script>
+
+  new Vue({
+    el: '#app',
+    data: {
+      women: [ /* список строк */
+          'Elena',
+          'Scully',
+          'Clarissa',
+          'Ophelia',
+      ],
+      people: [ /* список объектов */
+        {name: 'Scully', age: 20},
+        {name: 'Ophelia', age: 25},
+        {name: 'Elena', age: 30}
+      ],
+      person: {
+        name: 'Elena',
+        age: 30,
+        job: 'Frontend'
+      }
+    }
+  })
+
+</script>
+</body>
+</html>

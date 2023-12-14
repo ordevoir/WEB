@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue JS</title>
+</head>
+<body>
+
+<div id="app">
+    <h2>{{ title }}</h2>
+    <h3>{{ newField }}</h3>
+    <button @click="title = 'Updated title'">Update title</button>
+</div>
+
+<hr>
+
+<div id="app2">
+    <h2>{{ title }}</h2>
+    <button @click="updateFirstTitle">Update first title</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script>
+
+// помещаем экземпляр приложения в переменную vue1, теперь все данные
+// экземпляра будут доступны через vue1. , причем напрямую, например, к
+// title можно обратиться через vue1.title, а к методу alertFast через
+// vue1.alertFast (не нужно писать vue1.data.title и тд.)
+let vue1 = new Vue({
+  el: '#app', // инициализация
+  data: {
+    title: 'Hello I am Vue!'
+  },
+  methods: {
+    alertFast: function () {
+      alert('I am from vue 1')
+    }
+  }
+})
+
+console.log(vue1)
+// создаем новое поле в экземпляре vue1:
+vue1.newField = 'Random text'
+// при запуске страницы это поле не будет отображаться, так как мы 
+// создаем его уже после инициализации приложения vue1. Но при его
+// динамическом изменении, поле появится на странице. Однако приложение
+// можно инициализировать другим способом. Вместо строки el в объявлении
+// приложения, иницаилизируеем следующим образом:
+
+// vue1.$mount('#app')
+
+// по сути, при инициализации методом объявления el, происходит вызов
+// метода $mount, а здесь мы его выносим наружу...
+
+new Vue({
+  el: '#app2',
+  data: {
+    title: 'Hello from Vue 2'
+  },
+  methods: {
+    updateFirstTitle: function() {
+    // изменяем поля другого приложения:
+      vue1.title = 'Updated from second app'
+      vue1.newField = 'New newField!'
+
+    // вызов метода другого приложения:
+      setTimeout(function(){
+        vue1.alertFast()
+      },1000)
+    }
+  }
+})
+
+</script>
+</body>
+</html>

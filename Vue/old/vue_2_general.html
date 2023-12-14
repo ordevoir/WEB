@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue JS</title>
+</head>
+  <style>
+    h3 {
+      margin: 5px;
+    }
+  </style>
+<body>
+
+  <template>
+    Template
+  </template>
+
+<div id="app">
+
+<!-- Интерполяции внутри блоков -->
+    <h3>{{ titleInter }}</h3>
+    <h3>Sum (10 + 60): {{ 10 + 60 }}</h3> <!-- запишется результат операции -->
+    <!-- выводить можно не только str но и то, что может быть переведено в str: -->
+    <h3>Number: {{ number }}</h3>
+    <!-- вывод значения функции, если она возвращает значение, переводимое в str: -->       
+    <h3>Method: {{ sayHello() }}</h3>
+    <!-- тернарная операция в интерполяции -->
+    <h3>If statement: {{ isOk ? 'I am OK' : 'I am not OK!!' }}</h3>
+    <!-- при выводе значения переменной, можно применить последовательно  -->
+    <!-- функции; в данном случае разделить.развернуть.соединить: -->
+    <h3>Functions: {{ string.split('').reverse().join('') }}</h3>
+
+<!-- Интерполяции внутри атрибутов -->
+    <!-- для того, чтобы интерполировать данные внутри атрибутов -->
+    <!-- используются директивы (они всегда начинаются на "v-") -->
+    <a v-bind:href=url>Google</a>   <!-- для директивы v-bind есть ярлык : -->
+    <a :href="url">Google</a>       <!-- что делает эти две записи равнозначными -->
+    <!-- значение href теперь будет браться из поля url объекта приложения app -->
+
+<!-- Добавление событий -->
+    <h3>Счетчик = {{ counter }}</h3>
+    <!-- для для добавления событий используются директива v-on -->
+    <!-- здесь мы вписываем имя метода, который указан в methods: -->
+    <button v-on:click="riseCounter">Увеличить</button>
+    <!-- для директивы v-on есть ярлык @, пишется перед атрибутом без : -->
+    <!-- так же можно вписать тело функции прямо в атрибут: -->
+    <button @click="counter--">Уменьшить</button>
+    <!-- при наведении мыши будет меняться цвет через метод onHover -->
+    <h3 @mouseover="onHover">{{ countName }}  = {{ counter_1 }}</h3>
+    <!-- можно передавать параметры в функции; в данном случае мы явно -->
+    <!-- передали третим аргументом еще объект event, хотя это не обязательно -->
+    <button @click="increaseCounter(5, 'Изменено на 5', $event)">Увеличить на 5</button>
+    <button @click="increaseCounter(10, 'Изменено на 10')">Увеличить на 10</button>
+    
+
+<!-- Модификация событий -->
+    <!-- можно использовать модификатор prevent для отмены стандарного поведения -->
+    <h3><a :href="url" target="blank" @click.prevent="">Google</a></h3>
+    <!-- в данном случае мы отменили переход по ссылке -->
+    <h2 @mousemove="handleMouseMove">
+      X: {{ x }} \ Y {{ y }}
+    <!-- модефикатор stop отвечает за событие stop propagation: -->
+      <span @mousemove.stop="">Не изменять</span>
+    </h2>
+    <!-- с помощью модефикаторов событий клавиатуры можно указывать -->
+    <!-- на нажатие каких клавиш будет вызываться метод alertValue -->
+    <input type="text" @keyup.enter.esc="alertValue">
+    <!-- подробнее https://vuejs.org/v2/guide/events.html#Key-Modifiers -->
+    
+    <hr><br>
+
+    <!-- v-model позволяет связать значение формы со значением переменной -->
+    <!-- модефикатор lazy позволяет изменять значения переменной не  -->
+    <!-- синхронно, только после того, как мы выйдем из фокуса формы -->
+    <input type="text" v-model.lazy="inputValue">
+    <h3>{{ inputValue }}</h3>
+
+
+<!-- Управление отображением элементов -->
+    <span v-if="isOk">I am Visible</span>
+    <span v-else-if="number == 100">I am not!</span>
+    <span v-else>Something else</span>
+    <button @click="isOk = !isOk">Toggle</button>
+
+    <!-- для того, чтобы управлять отображением целого блока, содержащего
+    несколько элементов, можно воспользоваться тегом template из HTML5 -->
+    <template v-if="isOk">
+      <h3>Title</h3>
+      <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id, ipsa omnis!</span>
+    </template>
+
+    <!-- еще один способ управления отображением элемента, но в отличие
+    от v-if директива v-show не удаляет объект из DOM а лишь назначает
+    свойство display:none -->
+    <h3 v-show="isOk">Show</h3>
+
+<!-- Доступ к элементам DOM через ref: -->
+    <!-- создается ссылка с именем someName -->
+    <h3 ref="someName">Reference</h3>
+    <!-- метод changeColor меняет стиль, ссылаясь на мия someName -->
+    <button @click="changeColor">Change Color</button>
+
+<!-- Удаление приложения из памяти -->  <hr>
+    <button @click="doDestroy">Destroy</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script>
+
+// подключение vue посредством cdn указано на оффициальном сайте
+// https://ru.vuejs.org/v2/guide/
+// установка node.js
+// https://nodejs.org/en/download/
+
+// vue приложение подключается к какому либо тегу c заданным id.
+// объекту класса Vue в поле el передается css селектор этого id:
+// если id="app", то el: '#app'. Тогда объект становится приложением vue,
+// и все что находится внутри данного тега будет под его управлением.
+
+new Vue({
+    el: '#app',
+
+    data: {
+      /* данные для интреполяций */
+      titleInter: 'Интерполяции',
+      number: 100,
+      isOk: false,
+      string: 'My name is Fritz',
+      
+      url: 'http://google.com',
+      /* данные для добавления событий */
+      counter : 0,
+      counter_1 : 0,
+      counter_2 : 0,
+      countName: 'Cчетчик',
+      x: 0,
+      y:0,
+
+      inputValue: 'Initial value',
+
+    },
+
+    methods: {
+      sayHello: function() {
+        return 'I am function'
+      },
+      riseCounter: function() {
+        this.counter++
+        /* заметим, что бля обращения к переменной counter из словаря */
+        /* data нам не требуется писать this.data.counter */
+      },
+      onHover: function(e) {
+        e.target.style.color = 'red'
+      },
+      /* третий параметр функции не обязателен, но мы указываем его явно */
+      increaseCounter: function(num, str, e) {
+        this.counter_1 += num;
+        this.countName = str
+        if (num === 5) {
+          e.target.style.color = 'blue'
+        } else if (num === 10) {
+          e.target.style.color = 'red'
+        }
+      },
+      handleMouseMove: function(e) {
+        this.x = e.clientX
+        this.y = e.clientY
+      },
+      alertValue: function(event) {
+        alert(event.target.value)
+      },
+      changeColor: function() {
+        // получаем доступ к элементу DOM по ссылке
+        this.$refs.someName.style.color = 'red'
+        // $refs содержит все ссылки.
+        // системные имена начинаются на $
+      },
+      doDestroy: function() {
+        this.$destroy()
+        // метод удаляет приложение из памяти
+      }
+    },
+
+    watch: {
+    // здесь объявлены функции, одноименные с переменными в data;
+    // эти функции будут вызываться при изменении соответс. переменной
+    // и принимать текущее значение переменной в качестве параметра:
+      counter: function(val) {
+        console.log('from watch object', val)
+      },
+      counter_1: function(val) {
+        console.log('from watch object', val)
+      }
+    }
+  })
+
+</script>
+
+</body>
+</html>
