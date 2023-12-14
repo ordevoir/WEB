@@ -220,9 +220,15 @@ Vue предоставляет [встроенный набор директив
 Подробнее о том, как производить отрисовку списков, можно прочитать здесь ( [eng](https://v3.ru.vuejs.org/guide/list.html) | [rus](https://v3.ru.vuejs.org/ru/guide/list.html#%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-v-for) ).
 
 
-
-
 # Специальные атрибуты
+
+## `key`
+
+
+
+
+
+
 
 ## `ref` (доступ к элементу DOM)
 
