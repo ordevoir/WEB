@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <span v-for="i in text.length" 
+            :class="{ set_red: (i < 10)}"
+            >
+                {{ text[i] }}
+            </span>
+        </div>
+    </div>
+</body>
+
+<script>
+    const app = Vue.createApp({
+      name: "Application",
+      // Определение данных
+      data() {
+        return {
+            text: "I always like to see all the possible ways to solve something because then you can choose the best way for your use case. Also, when you see it pop up in someone's codebase, you will understand it with ease",
+        }
+    },
+      computed: {
+          splited() { return this.text.split('') },
+      },
+
+      // Определение методов
+      methods: {
+        increase: function() {
+            this.number++
+        }
+      }
+
+    }) 
+    app.mount('#app')
+</script>
+
+<style>
+    .set_red {
+        color: red;
+    }
+</style>
+
+</html>
