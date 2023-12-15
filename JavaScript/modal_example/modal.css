@@ -1,0 +1,78 @@
+/* по-умолчанию делаем эти блоки скрытими: */
+.modal-overlay, .modal-window {
+    z-index: -1;
+    opacity: 0;
+}
+/* и выходящими на передний план, когда создаются классы open и hide */
+.imodal.open .modal-overlay,
+.imodal.open .modal-window,
+.imodal.hide .modal-overlay,
+.imodal.hide .modal-window  {
+    z-index: 100;
+    opacity: 1;
+}
+
+.imodal.open .modal-window {
+    transform: translateY(100px);
+}
+
+.imodal.open .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.6)
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background .5s ease-in;
+}
+
+.modal-window {
+    width: 600px;
+    border-radius: 5px;
+    background: #fed;
+    margin: 0 auto;
+    transform: translateY(-200px);
+    transition: transform .5s ease-in;
+}
+
+.modal-header {
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+.modal-close {
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+.modal-body p {
+    margin: 0 0 5px;
+}
+
+.modal-footer {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+/* .row {
+    display: grid;
+    grid-template-columns: 300px 300px 300px; /* определили три колонки */
+    grid-template-rows: 375px 375px 375px 375px; /* высота певого и второго рядов */
+    grid-auto-rows: 40px; /* высота ряда по умолчанию */
+    grid-gap: 10px; /* разрывы между колоннами и рядами */
+    grid-column-gap: 20px;
+    /* grid-row-gap: 10px; разрывы между рядами */
+} */

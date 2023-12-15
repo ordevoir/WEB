@@ -1,0 +1,14 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+    Tags list - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1 class='md-5'>Tags</h1>
+
+    {% for tag in tags %}
+        <h2><a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a></h2>
+        <h3>{{ tag.user }}</h3>
+    {% endfor %}
+{% endblock %}

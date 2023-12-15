@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container borders"></div>
+    <div class="container various-borders"></div>
+    <div class="container radius"></div>
+    <div class="container various-radius"></div>
+    <div class="container percent-radius"></div>
+    <div class="container shadow"></div>
+    <div class="container inset-shadow"></div>
+    <div class="container double-shadow"></div>
+    <div class="container triple-shadow"></div>
+    <div class="container multi-shadow"></div>
+    
+</body>
+</html>
+
+<style>
+
+    body { background-color: rgb(255, 255, 255) }
+    .container {
+        display: block;
+        width: 200px;
+        height: 200px;
+        margin: 20px;
+        background-color: gold;
+    }
+    
+    .borders {
+        /* толщина, тип, цвет рамки: */
+        border: 5px solid rgb(255, 89, 89) ;
+        
+    }
+    .various-borders {
+        background-color: rgb(117, 117, 117);
+        border-bottom: 10px solid rgb(82, 82, 82);
+        border-right: 10px solid rgb(82, 82, 82);
+        border-left: 10px solid rgb(165, 165, 165);
+        border-top: 10px solid rgb(165, 165, 165);
+    }
+    
+    .radius {
+        border: 5px solid rgb(255, 89, 89) ;
+        border-radius: 30px;
+        /* также значение можно задавать в процентах */
+    }
+
+    .various-radius {
+        border-radius: 20px 120px; /* значения для противоположных углов */
+        /* также можно задавать значения для каждого угла по отдельности */
+    }
+
+    .percent-radius {
+        border-radius: 50%;
+    }
+
+    .shadow {
+        background-color:rgb(165, 165, 165);
+        border-radius: 10%;
+        /* формат тени такой:
+        сдвиг по горизонтали, сдвиг по вертикали, размытие, размер, цвет; */
+        box-shadow: 1px 1px 10px 3px #555;
+    }
+    .inset-shadow {
+        background-color:rgb(58, 58, 58);
+        border-radius: 10%;
+        box-shadow: inset 0 0 20px #fff; /* параметр размера указывать не обязательно */
+    }
+    
+    .double-shadow {
+        border-radius: 10%;
+        background-color:slategrey;
+        box-shadow: 1px 1px 10px 5px #555, inset 0 0 40px #ccc;
+    }
+    .triple-shadow {
+        border-radius: 10%;
+        background-color:rgb(66, 70, 73);
+        box-shadow:  3px 3px 15px 2px rgb(45, 161, 255),
+                    -2px -2px 12px 5px rgb(255, 157, 45),
+                    inset 0 0 40px #ccc;
+    }
+        
+        .multi-shadow {
+            border-radius: 50%;
+            background-color:rgb(162, 204, 207);
+            box-shadow: 0 0 40px 5px rgb(12, 112, 95),
+                        inset 0px 0px 15px #ccc,
+                        inset 2px 2px 4px #ccc,
+                        inset -15px -15px 20px 2px rgb(48, 48, 48),
+                        inset -35px -35px 25px 65px rgb(89, 100, 100);
+    }
+
+
+</style>

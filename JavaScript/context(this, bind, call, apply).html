@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+// this
+// ----------------------------------------------------------------------------
+
+function hello() {
+    console.log('Hello', this)
+}
+// В зависимости от того, откуда будет вызвана функция, по контексту, 
+// this будет указывать на соответствующий объект. Если ее просто вызвать
+// здесь, то this будет указывать на глобальный объект window:
+
+hello()
+
+// если же передать эту функцию объекту person в качестве метода
+const person = {
+    name: 'Friedrich',
+    age: 25,
+    sayHello: hello,
+}
+// то при вызове метода, this примет значение самого объекта person:
+
+person.sayHello()
+
+
+// bind
+// ----------------------------------------------------------------------------
+// у каждой функции есть метод bind, при помощи которого можно привязать
+// контектс this к определенному объекту, например:
+
+person.sayHelloWindow = hello.bind(window)
+
+// тогда this будет приязан к объекту window, хоте метод вызван у person:
+
+person.sayHelloWindow()
+
+// если методу bind передать вместо window просто this, то результат 
+// не изменится:
+
+hello.bind(this)() // тут же вызываем функцию
+
+// связано это с тем, что по умолчанию this ссылается на объект window:
+console.log(this)
+
+// важно понимать, что bind() не меняет исходную функцию, возвращает 
+// ту же функцию, но уже с приязанным контекстом
+
+// создадим еще одну функцию, использующую контекст, но еще принимающую 
+// значения:
+person.logInfo = function(job, phone) {
+    console.group(`${this.name} info:`) // просто для группировки вывода
+    console.log(`Name is ${this.name}`)
+    console.log(`Age is ${this.age}`)
+    console.log(`Job is ${job}`)
+    console.log(`Phone is ${phone}`)
+    console.groupEnd()                  // просто для группировки вывода
+}
+// и объект lena:
+const lena = {
+    name: 'Elena',
+    age: 29
+}
+// очевидно, что this будет ссылаться на person:
+
+person.logInfo('Backend', '+79093449922')
+
+// но можно будет вызвать метод объекта person в контекте объекта lena:
+
+person.logInfo.bind(lena)('Frontend', '+79092348909')   // первый способ
+person.logInfo.bind(lena, 'Frontend', '+79092348909')() // второй способ
+
+// можно так же создать новую переменную, котоая просто будет получать
+// функцию, которую возвращает bind:
+
+const lenaLogInfo = person.logInfo.bind(lena)
+lenaLogInfo('Frontend', '+79092348909')
+// второй способ, где уже передаются значения аргументов:
+const lenaLogInfoAlt = person.logInfo.bind(lena, 'Frontend', '+79092348909')
+lenaLogInfoAlt()
+
+
+// call
+// ----------------------------------------------------------------------------
+// метод call рабоате так же, как и bind, однако в отличие от bind,
+// тут же вызывает функцию:
+
+hello.bind(this)()  // эквивалентные
+hello.call(this)    // результаты
+
+person.logInfo.bind(lena, 'Frontend', '+79092348909')() // эквивалентные
+person.logInfo.call(lena, 'Frontend', '+79092348909')   // результаты
+
+
+// apply
+// ----------------------------------------------------------------------------
+// метод apply работает так же, как и call, однако в отличие от call,  
+// аргументы передаются не через запятую, а списком:
+
+person.logInfo.call(lena, 'Frontend', '+79092348909')    // эквивалентные
+person.logInfo.apply(lena, ['Frontend', '+79092348909']) // результаты
+
+</script>
+</body>
+</html>

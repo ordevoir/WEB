@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XHR</title>
+</head>
+<body>
+
+    <script src="XMLHttpRequest.js"></script>
+</body>
+</html>
+
+<script>
+
+// http://jsonplaceholder.typicode.com/ 
+// на этом сайте есть ресурсы, по которым можно полчить
+// данные в формате .json, например, по ссылке:
+// http://jsonplaceholder.typicode.com/users
+
+// XMLHttpRequest – это встроенный в браузер объект, который даёт 
+// возможность делать HTTP-запросы к серверу без перезагрузки страницы.
+
+const requestURL = 'http://jsonplaceholder.typicode.com/users'
+
+// создаем объект класса XMLHttpRequest (XHR)
+const xhr = new XMLHttpRequest()
+
+// Метод open() инициализирует новый запрос или повторно инициализирует
+// уже созданный. Обязательные параметры - method [запроса] и url:
+xhr.open('GET', requestURL, async=true) 
+// https://developer.mozilla.org/ru/docs/Web/API/XMLHttpRequest/open
+
+xhr.onload = () => console.log(JSON.parse(xhr.response))
+// onload - метод, вызываемый после того, как транзакция завершена
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequestEventTarget/onload
+
+// JSON.parse переводит текст, содержащийся в xhr.response в объект
+// вместо этого можно пропсиать предварительно xhr.responseType = 'json'
+
+xhr.send() // отправляем запрос
+// https://developer.mozilla.org/ru/docs/Web/API/XMLHttpRequest/send
+
+console.log('status:', xhr.status) // выведем статуы запроса
+// ошибками являются значения xhr.status >= 400 (например 404, 401)
+
+
+
+// теперь попробуем осуществить POST запрос (создадим новую сущность)
+let body = {
+    'name': 'Peter Hammill',
+    'metier': 'musitian'
+}
+// создадим новый экземпляр класса XMLHttpRequest
+const xhrAlt = new XMLHttpRequest()
+xhrAlt.open('POST', requestURL, async=true) // указыается method=POST
+// мы хотим отправить данные объекта body, но прежде эти данные нужно
+// конвертировать в строку:
+let bodyStr = JSON.stringify(body)
+// так же необходимо указать, что мы отправляем не просто текстовые 
+// данные, а данные в формате JSON при помощи метода setRequestHeader:
+xhrAlt.setRequestHeader(name='Content-Type', value='application/json')
+// конвертированнве данные передаются аргументом в метод send
+xhrAlt.send(bodyStr)
+
+</script>

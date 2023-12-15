@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<body>
+    <button class="btn">Создать Promise!</button>
+    <div class="log"></div>
+</body>
+</html>
+
+<script>
+
+// https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise
+// https://learn.javascript.ru/promise
+
+// Promise – предоставляют удобный способ организации асинхронного кода.
+
+console.log('синхронный вывод 1')  // синхронный вывод
+console.log('синхронный вывод 2')  // синхронный вывод
+
+// setTimeout как и setInterval входит в API браузеров, window.setTimeout()
+setTimeout(() => console.log('Inside timeout, after 1000 ms'), 1000)
+
+console.log('синхронный вывод 3') // будет выведено до сообщения из таймаута
+
+function salute() {
+    console.log('Greetings!')
+}
+// так же можно просто передавать функцию в setTimeout как callback
+// (без скобок, иначе функция будет тут же вызвана):
+setTimeout(salute, 500)
+
+// рассмотрим вложенные таймауты.
+setTimeout( () => {
+    let temp = 'C'
+    console.log(`message 1 ${temp} (1500 ms)`)
+    setTimeout( () => {         // этот таймаут запустится спустя 1500 ms
+        temp += 'S' 
+        console.log(`message 2 ${temp} (2000 ms)`)
+        setTimeout( () => {
+            temp += 'S'
+            console.log(`message 3 ${temp} (2500 ms)`)
+        }, 500)
+    }, 500)
+}, 1500)
+
+// Промисы позволяют избежать таких вложенностей. В общем случае промисы
+// используются для отложенных и асинхронных вычислений.
+// Promise – это специальный объект, который содержит своё состояние (state): 
+// вначале pending («ожидание»), затем – одно из: fulfilled («выполнено 
+// успешно») или rejected («выполнено с ошибкой»).
+// А так же свойство result — вначале undefined, далее изменяется на
+// value при вызове resolve(value) или на error при вызове reject(error).
+// Свойства state и result – это внутренние свойства объекта Promise и мы не 
+// имеем к ним прямого доступа. Для обработки результата следует использовать 
+// методы .then/.catch/.finally.
+// 
+// На promise можно навешивать колбэки двух типов:
+// onFulfilled – срабатывают, когда promise в состоянии «выполнен успешно».
+// onRejected – срабатывают, когда promise в состоянии «выполнен с ошибкой».
+
+// создаем объект Promise:
+const promise = new Promise(
+    function(resolve, reject) {
+    // Функция executor получает два аргумента - колбэки resolve и reject.
+    // Когда промис получает результат, сейчас или позже – не важно, он 
+    // должен вызвать один из этих колбэков:
+    // resolve(value) — если работа завершилась успешно, с результатом value.
+    // reject(error) — если произошла ошибка, error – объект ошибки.
+
+    setTimeout( () => {
+        const someText = 'some text'
+        console.log('from promise')
+        let indicator = true    // eсли false то будет вызван reject
+        if (indicator === true) {
+            resolve(someText)
+        } else {
+            reject('rejected')
+        }
+    }, 3000)
+})
+
+// Объект Promise служит связующим звеном между исполнителем и 
+// функциями-потребителями, которые получат либо результат, либо ошибку. 
+// Функции-потребители могут быть зарегистрированы (подписаны) с помощью 
+// методов .then/.catch/.finally.
+
+
+const rjct = function(text) {console.log(text)}
+
+// колбэк, перадваемый в then первым аргумнетовм вызывается при resolve
+// а колбэк, передаваемый вторым аргументом - при вызове reject в promise
+// получаемый аргумент text передается из promise (здесь это someText)
+promise.then(function(text) {
+    // эта функция запустится при разрешении promise и вызове колбэка resolve
+    console.log('text:', text) 
+}, rjct)    // а эта функция запустится при вызове колбэка reject
+
+// метод then() будет вызван когда будет вызван метод resolve в promise
+// (или в reject в случае отклонения). Он принимает один или два аргумента:
+// первый аргумент - функция-колбэк, который будет выполняться в случае
+// исполнения обещания, вторая функция будет выполняться в случае отклонения
+// обещания. Первой функции передается в качестве аргумента значение,
+// переданное функии resolve в обeщании, второй - соответственно - 
+// значение, переданное функции reject, если таковые вообще предусмотрены.
+// вторая функция в then может вовсе отсутсвовать, если не нужна, или если 
+// для случая отклонения предусмотрено использование метода cath (см. ниже).
+// Если мы хотели бы только обработать ошибку, то можно использовать null 
+// в качестве первого аргумента: .this(null, rjct)
+// метод then возвращает объект Promise
+
+// реализуем код с вложенными таймаутами при помощи обещаний:
+let btn = document.querySelector(".btn");
+let log = document.querySelector(".log")
+
+const testPromise = function(){
+    // эту функцию повесим на click кнопки btn
+    const promise1 = new Promise(
+        function(resolve, reject) {
+        setTimeout( () => {
+            let temp = 'C'
+            log.insertAdjacentHTML('beforeend', `<p>message 1 ${temp} (1500 ms)</p>`)
+            resolve(temp)
+        }, 1500)
+    })
+// в методе then функция-колбэк возвращает другой промис, у которого тут же 
+// вызывается метод then через точку (чейнится), в котором реализуется функция 
+// вывода третьего сообщения. Т.о. реализуется все цепочкой без вложенностей
+    promise1.then( ph => {
+        return new Promise( (resolve, reject) => {
+            setTimeout( () => {
+                ph += 'S'
+                log.insertAdjacentHTML('beforeend', `<p>message 2 ${ph} (2000 ms)</p>`)
+                resolve(ph)
+            }, 500)
+        }).then( data => {
+            setTimeout( () => {
+            data += 'S'
+            log.insertAdjacentHTML('beforeend', `<p>message 3 ${ph} (2500 ms)</p>`)
+            }, 500)
+            return data         // не обязательно возвращать здесь промисы, 
+        }).then( newData =>     // чтобы чейнить дальше (возвращаем строку) 
+            log.insertAdjacentHTML('beforeend', `<p>${newData}! (2500 ms)</p>`))
+    })
+}
+ 
+btn.addEventListener("click", testPromise)
+
+
+// методы catch и finally
+
+// метод catch ведет себя аналогично then, но работает только в случае 
+// отклонения обещания. принимает в качестве аргумента только одну функцию, 
+// которой передается значение, переданное функции reject в обещании.
+// Вызов .catch(f) – это сокращённый, «укороченный» вариант .then(null, f).
+
+let indicator = false
+const promise2 = new Promise(
+    (resolve, reject) => {
+        setTimeout( () => {
+            console.log('    there will be exception:')
+            if (indicator) {
+                resolve('all right')
+            } else { reject('some error') }
+        }, 3000)
+})
+
+// подобным образом можно организовать пользовательское прерывание, которое
+// происходит в теле else. Это прерывание должно обрабатываться методом 
+// catch, после чего цепочка может быть продолжена, т.е. будут выполнены
+// методы, идущие после перехвата catch:
+promise2.then( (e) => {
+    console.log(e)
+}).catch( (e) => {
+    console.log(e)
+}).then( (e) => {       // будет выведено благодаря наличию cath, которое
+    console.log('ok')   // обрабатывает прерывание и продолжает цепочку
+}).finally( () => console.log('finally')) // будет выведено в любом случае
+
+// метод finally вызывается в любом случае, независимо от того, было ли
+// прерывание, было ли оно обработано или нет. Вызов .finally(f) похож на 
+// .then(f, f), в том смысле, что f выполнится в любом случае, когда промис 
+// завершится: успешно или с ошибкой, но обработчик f не получает аргументов 
+
+// создадим функцию, возвращающую обещание с заданным значением задержки:
+const sleep = function(ms) {
+    return new Promise( resolve => {        // в функцию executor можно
+        setTimeout( () => resolve(), ms)    // передовать один аргумент
+    })                                      // resolve (без reject)
+}                                           // если он не будет использован
+// такая функция полезна тем, что с ее помощью можно выполнять то же, что
+// и с помощью setTimeout, но более лаконично и удобно:
+sleep(3500).then( () => console.log('After 3.5 s'))
+sleep(4000).then( () => console.log('After 4.0 s'))
+
+// Метод Promise.all(iterable) возвращает обещание, которое выполнится тогда,
+// когда будут выполнены все обещания, переданные в виде перечисляемого 
+// аргумента, или отклонено любое из переданных обещаний.
+
+// создатим массив из обещаний
+const promiseArray = [sleep(4000), sleep(4500)]
+
+Promise.all(promiseArray).then( () => console.log('All promises'))
+// сообщение 'All promises' будет выведено только после того, как выполнится
+// второе обещание в массиве promiseArray
+
+// Метод Promise.race(iterable) возвращает выполненное или отклоненное 
+// обещание, в зависимости от того, с каким результатом завершится первое из
+// переданных обещаний, со значением или причиной отклонения этого обещания.
+
+Promise.race(promiseArray).then( () => console.log('Race promises'))
+// сообщение 'Race promises' будет выведено только после того, как выполнится
+// первое обещание в массиве promiseArray
+
+</script>

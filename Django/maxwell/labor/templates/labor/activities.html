@@ -1,0 +1,15 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+    Activity Type list - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1 class='md-5'>Activity Types</h1>
+
+    {% for activity in activities %}
+        <h2><a href="{{ tag.get_absolute_url }}">{{ activity.title }}</a></h2>
+        <h3>{{ activity.user }}</h3>
+        <h3>{{ activity.boolean }}</h3>
+    {% endfor %}
+{% endblock %}

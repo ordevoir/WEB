@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+// создадим класс Tree:
+
+class Tree {
+    constructor(species, height) {
+        this.species = species
+        this.height = height
+    }
+// методы:
+    view() {
+        console.log(`this is ${this.species}, height = ${this.height} m`)
+    }
+}
+
+// данные и методы в классе перечисляются без запятых
+
+const maple = new Tree('maple', 10) // создаем экземпляр класса
+
+
+maple.view()                        // вызов метода
+
+const cat = {        // создадим объект dog
+    name: 'cat',
+    age: 5,
+    hasTail: true
+}
+// конструктор может быть устроен так, что принимает в качестве
+// аргументов объект:
+
+class Animal {
+    constructor(options) {
+        this.name = options.name
+        this.age = options.age
+        this.hasTail = options.hasTail
+    }
+    voice() {
+        console.log(`I am ${this.name}!`)
+    }
+}
+
+// в классах можно определять статические методы и переменные, которые
+// будут доступны только у самого класса, но не у экземпляров класса:
+
+class Mushroom {
+    static type = 'champignon'
+}
+
+let mushroom = new Mushroom()
+
+console.log(mushroom.type)  // выдаст undefined
+console.log(Mushroom.type)  // выдаст champignon
+
+// наследование:
+
+class Cat extends Animal {}
+
+class Dog extends Animal {  // Animal является суперклассом для Dog
+    constructor(options) {
+        super(options)              // вызов родительского конструктора
+        this.color = options.color  // дополнительное поле
+    }
+    voice() {
+        super.voice() // если нужен будет доступ к методу суперкласса
+        console.log('I am Dog')     // переопределение метода voice
+    }
+}
+
+
+</script>
+</body>
+</html>

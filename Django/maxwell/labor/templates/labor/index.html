@@ -1,0 +1,14 @@
+{% extends 'labor/basic_labor.html' %}
+<!-- этот шаблон является производным от базового шаблона basic_labor.html-->
+
+{% block title %}
+Tasks
+{% endblock %}
+
+{% block content %}
+{% for task in tasks %}
+
+    {% include 'labor/includes/task_card_tamplate.html' %}
+
+{% endfor %}
+{% endblock %}

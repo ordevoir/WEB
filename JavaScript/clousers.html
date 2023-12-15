@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+    
+
+// замыкание - это функция вместе со всеми внешними переменными, которые
+// ей доступны. Однако в js обычно, говоря «замыкание функции», 
+// подразумевают не саму эту функцию, а именно внешние переменные.
+
+function createIncrementor(n) {
+    return function(num) {
+        console.log(n + num)
+        return n + num
+    }
+}
+// функция createCalcFunction возвращает другую функцию
+
+const addOne = createIncrementor(1) // замыкаем переменную n на значении 1
+// создается функция addOne, которая принимает значеие num и возвращает n + num
+
+addOne(10)
+createIncrementor(5)(20) // можно и так, сразу создать и тут же вызвать функцию
+
+
+// другой пример:
+
+function urlGenerator(domain) {
+    return function(url) {
+        return `https://${url}.${domain}`
+    }
+}
+
+const comURL = urlGenerator('com')
+console.log(comURL('google'))
+console.log(comURL('dropbox'))
+
+const orgURL = urlGenerator('org')
+console.log(orgURL('rutracker'))
+
+
+
+function logPerson() {
+    console.log(`Person: ${this.name}, ${this.age}, ${this.job}`)
+}
+
+const person1 = {name: 'Fritz', age: 23, job: 'Frontend'} 
+const person2 = {name: 'Friedrich', age: 25, job: 'Backend'} 
+
+function bind(context, logPerson) {
+    return logPerson.bind(context)
+}
+
+bind(person1, logPerson)()
+bind(person2, logPerson)()
+
+
+</script>
+</body>
+</html>

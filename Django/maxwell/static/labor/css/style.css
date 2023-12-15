@@ -1,0 +1,312 @@
+:root {
+    --blackgray: #2A2822;
+    --coalgray: #46423E;
+    --lowgray: #65625D;
+    --highgray: #DEDAD6;
+}
+
+/* Убираем внутренние отступы */
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+/* Убираем внешние отступы */
+body, h1, h2, h3, h4, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
+  margin: 0;
+}
+
+@font-face { font-family: "Monsterrat"; src: url('https://fonts.googleapis.com/css?family=Montserrat&display=swap&subset=cyrillic')}
+
+body {
+    background-color: var(--blackgray);
+    display: grid;
+    font-family: 'Montserrat', sans-serif;
+    color: silver;
+}
+
+.checkbox {
+    background-color: aqua;
+}
+
+a {
+    text-decoration-line: none;
+    color: silver;
+    transition: 0.5s;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--coalgray);
+    position: fixed;
+    width: 100%;
+}
+
+main {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+nav ul {
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    grid-gap: 1.5px;
+    padding: 1.5px;
+    justify-items: center;  /* располагает по центру содержимое */
+    align-items: center;    /* внутри элемента */
+    justify-content: end;   /* прижимает элементы к правому краю */
+}
+
+nav ul ul {
+    margin-top: 5px;
+    display: none;
+    position: absolute;
+    /* top: 100%; */
+}
+
+nav ul li {
+    background-color: var(--lowgray);
+    padding: 5px 10px;
+    transition: 0.5s;
+}
+
+nav ul li:hover {
+    background-color: var(--highgray);
+}
+nav ul li:hover a {
+    color: lightgray;
+}
+
+nav ul ul li {
+    display: block;
+    margin: 0 -10px;
+}
+
+nav ul li:hover > ul {
+    display: block;
+}
+
+.create ul {
+    display: block;
+    grid-gap: 1px;
+    position: absolute;
+    list-style-type: none;
+}
+
+.create ul li {
+    /* background: green; */
+    display: block;
+    padding: 3px;
+    /* visibility: hidden; */
+}
+
+.create:hover > ul li {
+    display: block;
+    /* visibility: visible; */
+}
+
+content {
+    display: grid;
+    justify-content: center;
+    grid-gap: 5px;
+    padding: 5px;
+}
+
+.set-group {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.logout {
+    display: grid;
+    padding: 0;
+    grid-column: 2;
+}
+
+.form-group {
+    display: grid;
+    padding: 10px;
+    background-color: var(--coalgray);
+    grid-gap: 10px;
+    columns: 2;
+}
+
+button {
+    background-color: var(--lowgray);
+    border: 1px solid sandybrown;
+    justify-self: center;
+    padding: 5px 10px;
+    color: lightgray;
+    transition: 0.5s;
+}
+
+button:hover, button:focus {
+    border: 1px solid royalblue;
+    outline: none;
+    color: lightgray;
+}
+
+button:active {
+    border: 1px solid mediumturquoise;
+    outline: none;
+}
+
+.field-wrapper{
+    display: grid;
+    min-width: 450px;
+    max-width: 640px;
+    grid-gap: 5px;
+}
+
+.field-wrapper input {
+    background-color: var(--blackgray);
+    border: 1px solid dimgray;
+    color: lightgray;
+    padding: 5px;
+    /* text-align: center; */
+}
+
+/* убираем стрелочки на input number: */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+{ -webkit-appearance: none; margin: 0; }
+
+
+input[type=number] { 
+    -moz-appearance: textfield;
+    text-align: center;
+}
+
+#time-field-wrapper {
+    display: grid;
+    grid-template-columns: repeat(5, 70px);
+    grid-gap: 5px;
+}
+
+#time-field-wrapper input {
+    border-radius: 0;
+    width: 50px;
+}
+
+textarea {
+    background-color: var(--blackgray);
+    border: 1px solid var(--input-bord-clr);
+    color: lightgray;
+    transition: 0.5s;
+}
+
+textarea:hover {
+    border: 1px solid var(--input-bord-clr-hover);
+}
+
+textarea:focus {
+    border: 1px solid var(--input-bord-clr-focus);
+    outline: none;
+}
+
+/**************** Card ****************/
+
+.card {
+    display: grid;
+    background-color: var(--coalgray);
+    border: 1px solid var(--coalgray)
+}
+
+.card:hover {
+    border: 1px solid var(--highgray)
+}
+
+.card-body {
+    padding: 10px;
+    display: grid;
+    grid-gap: 5px;
+}
+
+.first-line {
+    display: grid;
+    grid-template-columns: 20px auto 20px;
+}
+
+.card-title {
+    background-color: var(--lowgray);
+    padding: 3px 5px;
+}
+
+.card-discribtion {
+    font-size: 9pt;
+}
+
+.card-timer {
+    display: grid;
+    grid-template-columns: auto 40px;
+    cursor: crosshair;
+}
+
+.remain {
+    width: 235px;
+}
+
+.card-buttons {
+    display:grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: end;
+    grid-gap: 1.5px;
+}
+
+.remain span {
+    font-size: .8rem;
+}
+
+.card-buttons a {
+    background-color: var(--lowgray);
+    display: block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+
+
+/********** Options **********/
+
+.options {
+    display: block;
+    position: relative;
+    padding: 2px;
+}
+
+.options ul {
+    list-style: none;
+    padding: 0;
+    opacity: .5;
+    width: 20px;
+    height: 20px;
+    transition: opacity .3s ease-in-out, width .13s ease-in-out, height .13s ease-in-out .13s;
+    position: absolute;
+    float: left;
+    background-color: brown;
+    overflow: hidden;
+}
+
+.options ul:hover {
+    width: 130px;
+    height: 88px;
+    opacity: 1;
+}
+
+.options ul li a {
+    display: block;
+    text-indent: 4px;
+    background-color: rgb(98, 99, 99);
+    cursor: pointer;
+    color: cornsilk;
+    height: 22px;
+    line-height: 22px;
+}

@@ -1,0 +1,12 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+{{ tag.title }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-5">Tasks with "{{ tag.title|title }}" tag:</h1>
+    {% for task in tag.tasks.all %}
+        {% include 'labor/includes/task_card_tamplate.html' %}
+    {% endfor %}
+{% endblock %}

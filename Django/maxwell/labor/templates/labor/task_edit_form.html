@@ -1,0 +1,54 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+    Edit Task "{{ task.title|title }}" - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'task_edit_url' slug=task.slug %}" method="post">
+        <!-- action указывает обработчик, к которому обращаются данные формы
+        при отправке на сервер. в данном случае назначается url с именем
+        task_edit_url, которому передается параметр slug -->
+        {% csrf_token %}
+        <div class="form-group">
+
+            {{ form.non_field_errors }} <!-- общие ошибки формы -->
+            <div class="field-wrapper">
+                {{ form.title.errors }}
+                {{ form.title.label_tag}}      <!-- <label> -->
+                {{ form.title }}               <!-- <input> -->
+            </div>
+            <div class="field-wrapper">
+                {{ form.discribe.errors }}
+                {{ form.discribe.label_tag}}    <!-- <label> -->
+                {{ form.discribe }}             <!-- <input> -->
+            </div>
+            <div id="time-field-wrapper">
+                <div class="field-wrapper">
+                    {{ form.days.errors }}
+                    {{ form.days.label_tag}}    <!-- <label> -->
+                    {{ form.days }}             <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.hours.errors }}
+                    {{ form.hours.label_tag}}      <!-- <label> -->
+                    {{ form.hours }}               <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.minutes.errors }}
+                    {{ form.minutes.label_tag}}     <!-- <label> -->
+                    {{ form.minutes }}               <!-- <input> -->
+                </div>
+            </div>
+            <div class="field-wrapper">
+                {{ form.tags.errors }}
+                <span>{{ form.tags.label_tag}}</span>
+                <div>{{ form.tags }}</div>
+            </div>
+
+        <button type="submit" name="button">Edit</button>
+        </div>
+    </form>
+
+
+{% endblock %}

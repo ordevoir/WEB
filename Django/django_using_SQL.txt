@@ -1,0 +1,92 @@
+# PostgreSQL
+# ----------
+0. предполагается, что установлен django и создан проект
+1. устанавливается база данных 
+2. устанавливаются пакеты для доступа к базе
+pip install psycopg2
+pip install django_postgres_extensions
+3. создается база данных (в консоли SQL Shell):
+create database <db_name>;   # создание базы данных с именем db_name
+
+некоторые комманды:
+\l или \list                # просмотр баз данных, которые уже созданы
+\connect <db_name>          # выбор базы данных db_name
+\dt                         # показать таблицы базы данных
+
+4. в settings.py прописывается:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '<db_name>',
+        'USER': 'postgres',
+        'PASSWORD': 'micromatosis2012',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
+    }
+}
+
+5. создаются миграции проекта:
+python manage.py makemigrations
+6. выполняются миграции:
+python manage.py migrate
+7. создается суперпользователь:
+python manage.py createsuperuser
+
+
+
+# MySQL
+# -----
+https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.11.0.msi # source
+# instruction for install MySQL server:
+https://wiki.merionet.ru/servernye-resheniya/12/ustanovka-mysql-servera-na-windows-10/
+
+pip install pymysql
+pip install mysqlclient # for MySQL
+
+# использовать MySQL Command Line Client, установленный вместе с сервером
+# для создания базы данных и пользователей (команды оканчиваются на ";"):
+
+show databases; # просмотр баз данных, которые уже созданы
+create database <db_name>; # создание базы данных с именем db_name
+use <db_name>; # выбор соответствующей базы данных
+show tables; # показать таблицы базы данных
+describe <table_name>; # показать поля таблицы <table_name>
+
+# ALTER TABLE - добавление, удаление изменение столбцов:
+https://andreyex.ru/bazy-dannyx/baza-dannyx-mysql/komanda-alter-table-v-mysql-kak-dobavit-udalit-i-izmenit-stolbtsy/
+
+drop table <table_name> # удаление таблицы <table_name>
+set foreign_key_checks = 0 # для игнорирования связанности Foreign Key
+
+
+SELECT User,Host FROM mysql.user; # просмотр пользователей
+
+# создание пользователя с именем 'someusername' и паролем '123'
+CREATE USER 'someusername'@'localhost' IDENTIFIED BY '123'; 
+# предоставление пользователю user_name из host все права над базой db_name
+GRANT ALL PRIVILEGES ON <db_name> . * TO 'user_name'@'host'; # (localhost)
+# а для предоставления так же привелегии давать права другим пользователям
+# суперпользователь:
+GRANT ALL PRIVILEGES ON <db_name> . * TO 'user_name'@'host' WITH GRANT OPTION; 
+# подробнее об изменении прав https://losst.ru/sozdanie-polzovatelya-mysql
+
+SHOW GRANTS FOR 'user_name'@'host'; # просмотр привелегий
+
+# После обновления прав пользователя необходимо обновить таблицу прав 
+# пользователей MySQL в памяти:
+FLUSH PRIVILEGES; 
+
+# для подключения проекта django к базе данных db_name в файле settings.py
+# записываем данные для базы данных с указанием root пользователя
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db_name',
+        'USER': 'root',
+        'PASSWORD': '****',
+        # 'HOST': 'localhost'
+    }
+}
+
+# создать зарегистрированного пользователя сайта с максимальными правами
+python manage.py createsuperuser

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h2>header</h2>
+    </header>
+    <nav>
+        <ul>
+            <li>nav</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </nav> 
+    <main>
+
+        <aside>
+            <h1>aside</h1>
+        </aside>
+
+        
+        <section>
+            <h1>section</h1>
+            <div>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+                <article>      
+                    <h1>article</h1>     
+                </article>
+
+            </div>
+
+        
+        </section>
+
+    </main>
+    <footer>
+        <h2>footer</h2>
+
+    </footer>
+    
+</body>
+</html>
+
+<style>
+
+body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
+html, body, h1, h2, h3, h4, h5 { margin: 0; padding: 0 }
+ul, ol {margin: 0; padding: 0; list-style-type: none; list-style: none; }
+
+header, footer {
+    min-height: 100px;
+    background-color:darkslategray;
+    margin: 5px;
+}
+
+nav ul {
+    min-height: 40px;
+    /* background-color: darkcyan; */
+    margin: 5px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 5px;
+}
+
+nav ul li {
+    /* margin: 2px; */
+    background-color: darkslategray;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+}
+
+nav ul li:hover {
+    background-color: rgb(58, 104, 104);
+    border: 2px solid #003f3b
+}
+
+main {
+    margin: 5px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 5px;
+}
+
+aside, section {
+    min-height: 600px;
+    background-color: darkslategray;
+}
+
+header h2, section h1, aside h1, footer h2 {
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+section div {
+    display: grid;
+    padding: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 200px;
+    grid-gap: 10px;
+}
+
+article {
+    color: white;
+    padding: 10px;
+    background-color:rgb(58, 104, 104);
+}
+
+</style>

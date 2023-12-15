@@ -10,6 +10,7 @@
     <div id="app">
         <div>
             <span v-for="i in textLine.length" 
+            class="default"
             :class="{ 
                 set_red: (textLine[i-1] !== typedText[i-1] && i-1 < typedText.length),
                 set_green: (textLine[i-1] === typedText[i-1] && i-1 < typedText.length),
@@ -18,36 +19,97 @@
                 {{ textLine[i-1] }}
             </span>
         </div>
-        <input type="text" v-model="typedText">
+        <input :disabled="isDisabled" type="text" v-model="typedText">
+        <button @click="start">Start</button>
+        <div>{{ remainSeconds }}</div>
     </div>
 </body>
 
 <script>
+    
     const app = Vue.createApp({
       name: "Application",
       // Определение данных
       data() {
         return {
-            textLine: "splited() { return this.text.split('') }",
-            typedText: "type"
+            fullText: "",
+            textLine: "",
+            typedText: "",
+            splittedText: [],
+            currentLineIndex: 0,
+            isTyping: false,
+            remainSeconds: 10,
+            isDisabled: true,
         }
     },
       computed: {
         //   typedCount() { return this.}
       },
 
+      mounted() {
+        path = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/tools.py"
+        this.fullText = this.loadFile(path)
+        this.splittedText = this.fullText.split("\n")
+        
+      },
+
       // Определение методов
       methods: {
+
         increase: function() {
             this.number++
+        },
+        
+        loadFile(path) {
+            let xhr = new XMLHttpRequest()
+            xhr.open("GET", path, false)
+            xhr.send()
+            if (xhr.status == 200) {
+                return xhr.responseText
+            } else {
+                console.log(xhr.status)
+            }
+        },
+
+        start() {
+            if (!this.isTyping) {
+                this.textLine = this.splittedText[0]
+                this.isDisabled = false
+                this.remainSeconds = 10
+            }
+        },
+
+      },
+      watch: {
+        typedText: function(newValue, oldValue) {
+            if (!this.isTyping) {
+                this.isTyping = true
+                this.interval = setInterval(() => {this.remainSeconds--}, 1000)
+            }
+            if (newValue.length === this.textLine.length) {
+                this.currentLineIndex++
+                this.textLine = this.splittedText[this.currentLineIndex].trim()
+                this.typedText = ""
+            }
+        },
+
+        remainSeconds: function(newValue, oldValue) {
+            if (this.remainSeconds <= 0) {
+                clearInterval(this.interval)
+                this.isTyping = false
+                this.isDisabled = true
+            }
         }
       }
+    })
 
-    }) 
     app.mount('#app')
 </script>
 
 <style>
+    .default {
+        font-family: "Lucida Console", Courier, monospace;;
+    }
     .set_green {
         color: green;
         background-color: rgb(222, 255, 255);

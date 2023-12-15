@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spread Rest Composition</title>
+</head>
+<body>
+</body>
+</html>
+
+<script>
+
+// Spread
+
+// оператор spread в применении к массивам "распаковывает" его элементы
+
+const citiesRussia = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск']
+
+const copyCities = citiesRussia // происходит копирование массива по ссылке
+const cloneCities = [...citiesRussia] // клонирование массива (новый объект)
+
+citiesRussia[1] = 'Нальчик'
+
+console.log(copyCities)     // citiesRussia и copyCities ссылаются на один массив
+console.log(cloneCities)    // citiesRussia и cloneCities независимые объекты
+
+// на практике бывает необходимо использовать методы, определенные в
+// классе Array, применительно к коллекциям. в этих случаях уместно
+// создать массив из элементов коллекции и там уже использовать методы:
+// array = [...collection]
+
+// так же можно объединить несколько массивов и объектов в один:
+
+const citiesEurope = ['Berlin', 'Paris', 'London']
+const newObj = 5
+
+const newCities = [...citiesRussia, newObj, 'Майкоп', ...citiesEurope]
+
+
+console.log('результат объединения оператором spread:')
+console.log(newCities)
+
+// массивы могут быть объединены при помощи метода concat:
+
+const newCitiesAlt = citiesRussia.concat(citiesEurope)
+console.log('результат объединения методом concat:')
+console.log(newCitiesAlt)
+
+// Пример
+// Найдем наибольший элемент массива:
+const numbers = [3, 5, 75, 23, 12]
+console.log(Math.max(numbers))      // такая запись не сработает
+console.log(Math.max(...numbers))   // а такая уже работает
+
+
+// оператор spread в примененнии к объектам
+
+const rusPupulation = {
+    Moskow: 27,
+    Kazan: 4,
+    Novosibirsk: 3,
+    Murmansk: 5
+}
+
+const euroPopulation = {
+    Moskow: 25,
+    Berlin: 20,
+    Paris: 25,
+    London:15
+}
+
+const copyRusPop = rusPupulation    // копирование объекта по ссылке
+const cloneRusPop = {...rusPupulation}  // клонирование объекта
+
+// объединение объектов:
+const mergedPopulation = {...rusPupulation, ...euroPopulation}
+
+// новый объект содержит все поля и соответствующие значени объектов,
+// которые были объединены. Если объекты имели одинаковые поля, то 
+// соответствущее поле в новом объекте принимает значение, которое было
+// в объекте, указанном последнима
+
+console.log(mergedPopulation)
+
+
+
+// Rest
+// оператор rest так же представляет из себя троеточие, но служит о для
+// того, чтобы собрать "лишние" аргументы, переданные функци, в массив
+
+// Пример:
+function sum(a, b, ...restArray) {  // собираем лишнее в массив restArray
+    return a + b + Math.max(...restArray)
+}
+console.log(sum(...numbers))
+
+// Пример (деструктуризация массива):
+const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+const [a, b, ...other] = digits // a и b принимают первые два элемента  
+console.log(a, b, other)        // digits, оставшееся в массив other
+
+// Пример (деструктуризация объекта euroPopulation, см. выше):
+const {Moskow, Berlin, ...rest} = euroPopulation
+console.log(Berlin, Moskow, rest)
+
+
+
+// Композиция - объединение элементов в единое целое определим 
+
+// для начала определим функцию canCode которая возвращают объект,
+// содержащий метод code:
+function canCode({ name }) {    // функция получает на входе объект
+    return {                    // и забирает его поле name
+        code: () => console.log(`${name} is coding...`)
+    }
+}
+// аналогично опреднляем функцию canAngular:
+function canAngular({ name }) {     // функция получает на входе объект
+    return {                        // и забирает его поле name
+        angular: () => console.log(`${name} is creating Angular app...`)
+    }
+}
+
+// определим функцию, которая будет составлять композицию данных,
+// получаемых в виде аргумента name, и метода code получаемой из объеета,
+// возвращаемого функцией canCode:
+function createProgrammer(name) {   // эмулируем конструктор
+    const programmer = {name}   // создается поле name, которое будет
+    return {                    // содержать значение аргумента name.
+        ...programmer,          // в результате возвращается объект
+        ...canCode(programmer)  // с полем name и методом code()
+    }
+}   // {name: name}  <=>  {name}, т.к. значение и ключ совпадают
+
+const firstProgrammer = createProgrammer(name = 'Werner') // можено без name
+// так, firstProgrammer будет объектом, с полем name и методом code():
+console.log(firstProgrammer)
+
+// теперь определяем функцию, которая будет составлять композицию из 
+// полей объекта, возвращаемого функцией createProgrammer, и метода 
+// angular, получаемого из объеета, возвращаемого функцией canCode:
+function createFrontend(name) {
+    const angProgrammer = createProgrammer(name)
+    return {
+        ...angProgrammer,   // распаковываются поля объекта angProgrammer
+        ...canAngular(angProgrammer) // распаковывается метод angular
+    }
+}
+
+const secondProgreammer = createFrontend('Fritz')
+// secondProgreammer будет объектом, с полем name и методами code, angular:
+console.log(secondProgreammer)
+
+
+</script>

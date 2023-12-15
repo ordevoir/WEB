@@ -1,0 +1,284 @@
+html, body, h1, h2, h3, h4, h5 { margin: 0; padding: 0 }
+ul, ol {margin: 0; padding: 0; list-style-type: none; list-style: none; }
+p { padding : 5px; margin: 0}
+a { text-decoration: none; color: white; }
+
+body {
+    background: #313131;
+    font-family: PT Sans, Arial;
+    font-size: 18px;
+    color: white;
+}
+
+header {
+    display: block;
+    background: #222 url(../img/bg-header.png) center repeat;
+    max-width: 800px;
+    min-width: 600px;
+    position: relative;
+    padding: 15px;
+    margin: auto;
+}
+
+header::after {
+    content: '.';
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+}
+
+#headline {
+    display: inline-block;
+    float: left;
+    background: rgb(26, 43, 43);
+    height: 80px;
+    width: 120px;
+    padding: 20px;
+    margin: 10px;
+    position: relative;
+    border: solid 2px #444;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+}
+
+#progressive, #classical {
+    display: inline-block;
+    float: left;
+    border: solid 1px #444;
+    width: 100px;
+    height: 80px;
+    padding: 20px;
+    margin: 10px;
+    position: relative;
+}
+
+#treble-clef {
+    float: left;
+    border: solid 1px #444;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: 10px;
+    background-image: url(../img/treble-clef.png),
+                      url(../img/bg-chess.png);
+    background-repeat: no-repeat, repeat;
+    background-position: center;
+}
+
+.button-circle {
+    display: block;
+    margin: 20px;
+    width: 100px;
+    height: 100px;
+    background: #333 url(../img/button-background.png);
+    cursor: pointer;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+
+    box-shadow: 0 0 20px rgba(255,255,255, .25),
+                inset 8px 6px 30px rgba(90, 97, 73, 0.6),
+                inset -8px -8px 30px rgba(8, 10, 0, 0.8),
+                -12px -12px 20px rgba(255,255,255, .1),
+                inset -12px -12px 20px rgba(255,255,255, .1);
+}
+.button-circle:hover {
+    box-shadow: 0 0 20px rgba(255,255,255, .25),
+                inset 0 0 60px rgba(90, 97, 73, 0.6),
+                0 0 20px rgba(255,255,255, .1),
+                inset 0 0 20px rgba(255,255,255, .1);
+}
+
+.buttons {
+    display: inline-block;
+    float: left;
+    margin: 15px;
+}
+.buttons li a {
+    background: url(../img/button-sprite.png);
+    display: block;
+    width: 112px;
+    height: 28px;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    padding-top: 20px;
+    background-position: -10px -12px;
+}
+
+.buttons li a:hover {
+    background-position: -10px -81px;
+}
+
+.buttons li a:active {
+    background-position: -10px -151px;
+}
+
+#progressive {
+    
+
+}
+
+#classical {
+    
+}
+
+/******* Menu *******/
+
+nav {
+    display: block;
+    position: relative;
+    min-height: 330px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2px;
+}
+
+.navigation {
+    list-style: none;
+    padding: 0;
+    margin: 30px;
+    opacity: .5;
+    width: 40px;
+    transition: opacity 1s ease-in-out;
+    float: left;
+    position: absolute;
+}
+
+.navigation:hover {
+    width: 200px;
+    opacity: 1;
+}
+
+.navigation li {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    transition: width .3s ease-in-out, height .2s ease-in .2s;
+
+}
+
+.navigation li:hover {
+    width: 200px;
+    height: 175px;
+}
+
+.navigation li a {
+    display: block;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    background: #666;
+    margin: 1px;
+    color: #fff;
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+.navigation li a:hover {
+    background: #088;
+    transition: background .3s ease-in-out;
+
+}
+
+.navigation li a:first-child {
+    font-size: 1.1em;
+    text-indent: 40px;
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+}
+
+.navigation li a:first-child::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 32px;
+    height: 32px;
+    top: 9px;
+    left: 10px;
+}
+
+.classical a:first-child::before {
+    background: url(../img/classical_2.png) center no-repeat;
+}
+
+.progressive a:first-child::before {
+    background: url(../img/rock_8.png) center no-repeat;
+}
+
+.modern a:first-child::before {
+    background: url(../img/rock_7.png) center no-repeat;
+}
+
+.slider {
+    position: relative;
+}
+
+section {
+    display: block;
+    background: rgb(42, 44, 43);
+    max-width: 800px;
+    min-width: 600px;
+    min-height: 180px;
+    position: relative;
+    padding: 15px;
+    margin: auto;
+}
+
+#block-1 {
+    background: rgb(32, 36, 32);
+    padding: 30px;
+}
+.section-caption {
+    margin-bottom: 10px;
+}
+
+#block-1 .text-2 {
+    font-weight: bold;
+    word-spacing: 15px;
+    letter-spacing: 4px;
+}
+
+.text-3 {
+    font-style: italic;
+    text-indent: 30px;
+}
+
+.text-4 {
+    font-variant: small-caps;
+    line-height: 30px;
+    text-shadow: 1px 1px 1px #b0c74b, 3px 3px 5px #000;
+}
+
+.text-5 {
+    text-decoration: underline;
+    color: #b0c74b;
+}
+
+.text-6 {
+    text-decoration: line-through;
+    text-align: left;
+}
+
+.text-7 {
+    text-transform: lowercase;
+    text-align: right;
+    text-shadow: 0px 1px 0 #1b7400
+}
+
+.text-8 {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.text-9 {
+    text-transform: capitalize;
+    text-align: justify;
+}
+

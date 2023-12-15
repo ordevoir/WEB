@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Селекторы</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <section>
+        <!-- элемент с заданным id должен быть единственным, в то время как 
+        элементов с заданным class сожет быть произвольное количество-->
+        <div id="block">    
+            <h2>block</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deserunt quos maiores ut ab cum? Exercitationem, commodi amet ipsum repellendus, voluptas delectus perspiciatis nemo dignissimos iure rem accusantium incidunt cumque eligendi.</p>
+            <p class="red-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deserunt quos maiores ut ab cum? Exercitationem, commodi amet ipsum repellendus, voluptas delectus perspiciatis nemo dignissimos iure rem accusantium incidunt cumque eligendi.</p>
+        </div>
+        <div id="other-block">
+            <h2>other-block</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam aperiam voluptates a autem ducimus, facilis quod qui corrupti error ut rem consequuntur velit repudiandae dolor iure molestiae ab necessitatibus soluta!</p>
+            <p class=red-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti aliquam numquam cumque harum quae accusantium atque debitis quibusdam quo, commodi omnis explicabo, blanditiis eligendi repellat dolores maxime iusto. Explicabo, nobis!</p>
+        </div>
+        <div id="another-block">
+            <h2>another-block</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam aperiam voluptates a autem ducimus, facilis quod qui corrupti error ut rem consequuntur velit repudiandae dolor iure molestiae ab necessitatibus soluta!</p>
+            <p class=red-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti aliquam numquam cumque harum quae accusantium atque debitis quibusdam quo, commodi omnis explicabo, blanditiis eligendi repellat dolores maxime iusto. Explicabo, nobis!</p>
+        </div>
+    </section>
+    <section>
+        <div class="info">
+            <h2>Класс info с важной информацией</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+            <p class="blue-text">Этот параграф является прямым потомком блока с классом info</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+            <div>
+                <p class="blue-text">Этот параграф НЕ является прямым потомком блока с классом info</p>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2>Можно задавать одному элементу несколько классов</h2>
+        <p class="class-1">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+        <p class="class-2">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+        <p class="class-1 class-2">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+    </section>
+    <section>
+        <input type="text">
+        <input type="month">
+        <input>
+
+    </section>
+
+</body>
+</html>
+
+<style>
+
+/* задание стилей для тэгов */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: beige;
+}
+section {
+    margin: 10px auto 10px;
+    padding: 10px;
+    max-width: 640px;
+    background-color: bisque;
+}
+
+/* для задания общих стилистических свойств различным 
+селекторам можно указать селекторы через запятую */
+h2, p { color: #555 }
+
+/* задание стилей для элемента с id="block" */
+#block {
+    background-color: #ccc;
+    padding: 12px;
+}
+
+/* задание стилей для элементов с классом red-text */
+.red-text { color:rgb(206, 61, 61) }
+.blue-text { color: #5577ff}
+.info { 
+    background-color: #ccc;
+    padding: 10px;
+}
+
+/* задание стиля для вложенного элемента (указывается через пробел) */
+#another-block p { color:rgb(0, 163, 0) }
+/* заметим, что стиль, заданный для элемента id,
+в большем приорите, чем стиль, заданный классу (red-text) */
+
+/* Комбинатор '>' в отличие от пробела выбирает только те элементы, 
+которые являются дочерними непосредственно по отношению к указанному элементу. */
+.info > .blue-text { background-color:rgb(237, 245, 240)}
+
+/* Комбинатор '+' выбирает элемент, который находится 
+после указанного элемента, если у них общий родитель. */
+.blue-text + p { color: rgb(44, 187, 0);}
+
+.class-1 { color:rgb(206, 61, 61) }
+.class-2 { text-decoration: underline;}
+
+
+/* выбирать элементы по аттрибутам; в данном случае выберем все 
+элементы input, у которых вообще указан атрибут type */
+input[type] {
+    border: 1px solid rgb(255, 0, 0);
+}
+/* а здесь будут выбраны только те элементы input у которых type=month */
+input[type=month] { background-color: #97deff }
+
+</style>

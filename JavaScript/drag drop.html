@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper">
+      <ul class="list">
+        <li class="list_caption">Planned</li>
+        <li class="list_caption">In Dev</li>
+        <li class="list_caption">QA</li>
+        <li class="list_caption">Production</li>
+        <li class="list_cell js-cell">
+          <!-- для того, чтобы элемент стал перетаскиваемым, необходимо
+          задать свойство draggable="true" -->
+          <div class="list_card js-card" draggable="true">
+            <div class="list_card-header">
+              task title
+            </div>
+            <div class="list_card-info">
+              task description
+            </div>
+          </div>
+        </li>
+        <li class="list_cell js-cell"></li>
+        <li class="list_cell js-cell"></li>
+        <li class="list_cell js-cell"></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+
+const dragAndDrop = () => {
+
+// получим элементы страницы:
+
+const card = document.querySelector('.js-card')     // перетаскиваемый элемент
+const cells = document.querySelectorAll('.js-cell') // зоны для перетаскивания
+
+
+// на старте перетаскивания, в исходной ячейке будет исчезать перетаскиваемый
+// элемент card, и будет появляться обратно после завершения перетаскивания:
+
+const dragStart = function() {
+  setTimeout(() => {
+    this.classList.add('hide')  
+  }, 0)
+    // this.classList.add('hide')   // this для функций-обрабочиков ссылается
+                                    // на объект у которого слушается событие
+
+    // если не обернуть эту инструкцию в setTimeout, то назначение
+    // класса hide элементу card назначится сразу, до того, как пойдет
+    // перетаскивание. Для того, чтобы элемент получил класс hide,
+    // непосредственно после начала перетаскивания (точнее, после того,
+    // как отработается весь остальной код файла), его оборачиваем
+    // в setTimeout (видимо, что-то вроде nextTime в Vue)
+}
+
+const dragEnd = function() {
+  this.classList.remove('hide')
+  // удаляем класс 'hide' с элемента card после завершения перетаскивания
+}
+
+card.addEventListener('dragstart', dragStart)
+card.addEventListener('dragend', dragEnd)
+
+
+// далее идут обработчики соответствующих событий, связанных с cell
+
+const dragOver = function(e) {
+  e.preventDefault()  // обязательно (см. ниже)
+}
+const dragEnter = function(e) {
+  e.preventDefault()  // желательно
+  this.classList.add('hovered') // подсвечиваем cell
+}
+const dragLeave = function() {
+  this.classList.remove('hovered')
+}
+const dragDrop = function() {
+  this.append(card)
+  // добавляем элемент card в соответствующий элемент cell
+
+  this.classList.remove('hovered')
+  console.log('drop')
+}
+
+cells.forEach((cell) => {
+  cell.addEventListener('dragover', dragOver)
+  // dragover срабатывает беспрерывно, когда перетаскиваемый объект
+  // находится над элементом cell, остальные события срабатывают один раз: 
+  cell.addEventListener('dragenter', dragEnter)
+  cell.addEventListener('dragleave', dragLeave)
+  cell.addEventListener('drop', dragDrop)
+  // для того, чтобы событие drop сработало, нужно будет передать
+  // event в dragOver и вызвать метод preventDefault() (см. выше)
+})
+}
+
+dragAndDrop()
+
+</script>
+
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial;
+  font-size: 16px;
+  line-height: normal;
+  font-weight: 400;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 100px 0;
+}
+
+.list_caption {
+  margin: 20px;
+  width: calc(25% - 40px);
+  list-style-type: none;
+  font-weight: bold;
+  color: blue;
+}
+
+.list_cell {
+  width: calc(25% - 40px);
+  margin: 0 20px;
+  min-height: 150px;
+  list-style-type: none;
+  box-shadow: 0px 0px 7px 5px rgba(0, 0, 0, 0.2);
+  background-color: seashell;
+  overflow: hidden;
+}
+
+.list_card {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  text-align: center;
+  min-height: 100%;
+  cursor: all-scroll;
+}
+
+.list_card-header {
+  font-weight: bold;
+  padding: 12px 20px;
+  background-color: blue;
+  color: seashell;
+}
+
+.list_card-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.hide {
+  display: none;
+}
+.hovered {
+  background-color: snow;
+}
+</style>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="stylesheet" href="style.css">  -->
+    <title>Document</title>
+</head>
+<body>
+    <h3>Using fixed columns (non-adaptive):</h3>
+    <div class="grid-fix">
+        <div class="post">(1) 200px</div>
+        <div class="post">(2) 250px</div>
+        <div class="post">(3) 300px</div>
+        <div class="post">(4) 200px</div>
+        <div class="post">(5) 250px</div>
+        <div class="post">(6) 300px</div>
+        <div class="post">(7) 200px</div>
+        <div class="post">(8) 250px</div>
+    </div>
+
+    <h3>Using fractions (adaptive):</h3>
+    <div class="grid-fraction">
+        <div class="post">(1) 1.5fr</div>
+        <div class="post">(2) 3.5fr</div>
+        <div class="post">(3) 1fr</div>
+        <div class="post">(4) 150px</div>
+        <div class="post">(5) 1.5fr</div>
+        <div class="post">(6) 3.5fr</div>
+        <div class="post">(7) 1fr</div>
+        <div class="post">(8) 150px</div>
+    </div> 
+
+    <h3>Using repeat (same as fractions):</h3>
+    <div class="grid-repeat">
+        <div class="post">(1) 120px</div>
+        <div class="post">(2) repeat(2, 1fr 2fr)</div>
+        <div class="post">(3) repeat(2, 1fr 2fr)</div>
+        <div class="post">(4) repeat(2, 1fr 2fr)</div>
+        <div class="post">(5) repeat(2, 1fr 2fr)</div>
+        <div class="post">(6) 120px</div>
+        <div class="post">(7) repeat(2, 1fr 2fr)</div>
+        <div class="post">(8) repeat(2, 1fr 2fr)</div>
+    </div> 
+    
+    <h3>Using minmax for columns:</h3>
+    <div class="grid-minmax-column">
+        <div class="post">(1) minmax(200px, 300px)</div>
+        <div class="post">(2) 1fr</div>
+        <div class="post">(3) minmax(100px, 200px)</div>
+        <div class="post">(4) 2fr</div>
+        <div class="post">(5) minmax(200px, 300px)</div>
+        <div class="post">(6) 1fr</div>
+        <div class="post">(7) minmax(100px, 200px)</div>
+        <div class="post">(8) 2fr</div>
+    </div> 
+    
+    <h3>Using minmax for rows:</h3>
+    <div class="grid-minmax-row">
+        <div class="post">(1) minmax(150px, auto) <br>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio recusandae labore deserunt autem tempore quam quaerat aliquam facilis delectus aperiam libero nostrum, suscipit consequatur quia velit, necessitatibus, dolore eveniet. Optio!</div>
+        <div class="post">(2) minmax(150px, auto)</div>
+        <div class="post">(3) minmax(150px, auto)</div>
+        <div class="post">(4) minmax(150px, auto)</div>
+        <div class="post">(5) minmax(150px, auto)</div>
+        <div class="post">(6) minmax(150px, auto)</div>
+        <div class="post">(7) minmax(150px, auto)</div>
+        <div class="post">(8) minmax(150px, auto)</div>
+    </div> 
+    
+    <h3>Using another flowing (notice - 4 columns):</h3>
+    <div class="grid-altflow">
+        <div class="post">(1)</div>
+        <div class="post">(2)</div>
+        <div class="post">(3)</div>
+        <div class="post">(4)</div>
+        <div class="post">(5)</div>
+        <div class="post">(6)</div>
+        <div class="post">(7)</div>
+        <div class="post">(8)</div>
+    </div> 
+    
+    <h3>Responsive:</h3>
+    <div class="grid-responsive">
+        <div class="post">(1)</div>
+        <div class="post">(2)</div>
+        <div class="post">(3)</div>
+        <div class="post">(4)</div>
+    </div> 
+    
+    <h3>Responsive with minmax (using auto-fill):</h3>
+    <div class="grid-responsive-mimnax">
+        <div class="post">(1)</div>
+        <div class="post">(2)</div>
+        <div class="post">(3)</div>
+        <div class="post">(4)</div>
+    </div> 
+
+    <h3>Responsive with minmax (using auto-fit):</h3>
+    <div class="grid-responsive-mimnax-alt">
+        <div class="post">(1)</div>
+        <div class="post">(2)</div>
+        <div class="post">(3)</div>
+        <div class="post">(4)</div>
+    </div> 
+    
+    <h3>Line positioning:</h3>
+    <div class="grid-line-position">
+        <div class="post">(1) grid-row: 1 / 3</div>
+        <div class="post">(2) grid-column: 2 / 4</div>
+        <div class="post">(3)</div>
+        <div class="post">(4) grid-column: 2 / -1</div>
+        <div class="post">(5) grid-column: 1 / 4</div>
+        <div class="post">(6) grid-row: 3 / 5<br>grid-column: 4</div>
+    </div> 
+    
+    <h3>Justify and Align:</h3>
+    <div class="grid-justify">
+        <div class="post">(1) Some text</div>
+        <div class="post">(2) Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, architecto unde ipsam reiciendis nesciunt culpa autem laborum corrupti illo saepe pariatur quo labore omnis expedita dolores iure? Nisi, temporibus suscipit.</div>
+        <div class="post">(3) default:<br>justify-self: stretch;<br>align-self: stretch;</div>
+        <div class="post">(4)</div>
+        <div class="post">(5) <br>justify-self: center;<br>align-self: start;</div>
+        <div class="post">(6)</div>
+    </div> 
+    
+</body>
+</html>
+
+
+
+<style>
+
+body {
+    background-color: rgb(24, 24, 24);
+    color: #afafaf;
+    font-family: roboto, Tahoma, Arial;
+    font-size: 14px;
+}
+.post {
+    background-color: rgb(90, 90, 90);
+    border-radius: 1px;
+    padding: 8px 15px;
+    color: #ffffff;
+}
+.post:nth-child(odd) { background-color: rgb(68, 68, 68) }     /* четные */
+
+
+/* жесткая сетка с фиксированными значениями ширины и высоты */
+.grid-fix {
+    display: grid;                              /* задается тип отображения grid */
+    grid-template-columns: 200px 250px 300px;   /* определили три колонки фиксированной ширины */
+    grid-template-rows: 150px 100px;            /* фиксированная высота (певого и второго рядов) */
+    grid-auto-rows: 60px;                       /* высота ряда по умолчанию */
+    grid-gap: 10px;                             /* разрывы между колоннами и рядами */
+    /* grid-column-gap: 20px; разрывы между колоннами */
+    /* grid-row-gap: 10px; разрывы между рядами */
+}
+
+/* гибкая сетка, содержащая колонки с относительными значениями ширины */
+.grid-fraction {
+    display: grid;
+    grid-template-columns: 1.5fr 3.5fr 1fr 150px;   /* определили четыре колонки */
+    grid-auto-rows: auto;                           /* высота ряда подстраивается под контент */
+    grid-gap: 10px;                                 /* разрывы между колоннами и рядами */
+}
+
+/* создание колонок с использованием функции repeat */
+.grid-repeat {
+    display: grid;
+    grid-template-columns: 120px repeat(2, 1fr 2fr);    /* определили пять колонок */
+    /* первая колонка - c фиксированной шириной в 120px */
+    /* дважды повторяются пары колонок с относительной шириной 1fr и 2fr соответственно */
+    grid-gap: 10px;                                     /* разрывы между колоннами и рядами */
+}
+
+/* использование полугибких колонок с min и max значениями ширины */
+.grid-minmax-column {
+    display: grid;
+    /* определили пять колонок с min и max значениями ширины: */
+    grid-template-columns: minmax(200px, 300px) 1fr minmax(100px, 200px) 2fr; 
+    grid-gap: 10px;                 /* разрывы между колоннами и рядами */
+}
+
+/* использование полугибких рядов с min и max значениями высоты */
+.grid-minmax-row {
+    display: grid;  /* задается свойство отображения grid */  
+    grid-template-columns: repeat(4, 1fr);      /* определяются 4 равные колонки*/
+    /* минимальная высота ряда будет равна 150px и при необходимости растянется контентом: */
+    grid-auto-rows: minmax(150px, auto);
+    grid-gap: 10px;                 /* разрывы между колоннами и рядами */
+}
+
+/* изменение потока элементов */
+.grid-altflow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 60px);
+    /* изменим поток так, чтобы заполнение шло не слева направо, а сверху вниз: */
+    grid-auto-flow: column;     
+    /* минимальная высота ряда 150px и при необходимости может быть растянуто до 100px: */
+    grid-auto-rows: minmax(60px, 100px);
+    grid-gap: 10px;                 /* разрывы между колоннами и рядами */
+}
+
+/* автоматическое определение количества колонок */
+.grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 220px);
+    grid-gap: 10px;                 /* разрывы между колоннами и рядами */
+}
+
+.grid-responsive-mimnax {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    /* auto-fill создает здесь столько колонок, сколько возможно */
+    grid-gap: 10px;
+}
+
+.grid-responsive-mimnax-alt {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    /* в отличие от auto-fill возникает, есть только один ряд и не хватает элементо для его заполнения  */
+    /* в этом случае он сделает ширину пустых колонок равными нулю и оставшиеся максимально растянутся  */
+    grid-gap: 10px;
+}
+
+/* положение элементов в сетке */
+.grid-line-position {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: 40px;
+}
+.grid-line-position div:nth-child(1) {
+    grid-row: 1 / 3;
+}
+.grid-line-position div:nth-child(2) {
+    grid-column: 2 / 4;     /* растягивает второй элемент на второую и третью колонны */
+    /* аналогично этой записи: */
+    /* grid-column-start: 2; */
+    /* grid-column-end: 4; */
+}
+
+.grid-line-position div:nth-child(4) {
+    grid-column: 2 / -1;    /* растягивает пятый элемент со второй колонны до последний */
+}
+
+.grid-line-position div:nth-child(5) {
+    grid-column: 1 / 4;
+}
+
+.grid-line-position div:nth-child(6) {
+    grid-row: 3 / 5;
+    grid-column: 4;
+}
+
+/* выравнивание элементов внутри сетки */
+.grid-justify {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 10px;
+    grid-auto-rows: minmax(120px, auto);
+    justify-items: end;     /* выравнивание элементов по горизонтали */
+    align-items: center;    /* выравнивание элементов по вертикали*/
+}
+
+.grid-justify div:nth-child(3) {
+    justify-self: stretch;  /* выравнивание данного элемента по горионтали */
+    align-self: start;      /* выравнивание данного элемента по вертикали */
+}
+
+.grid-justify div:nth-child(5) {
+    justify-self: center;   /* выравнивание данного элемента по горионтали */
+    align-self: stretch;    /* выравнивание данного элемента по вертикали */
+}
+
+</style>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {% endblock %}
+
+{% block container %}
+
+<header>
+    <nav>
+      <ul>
+        <li><a href="{% url 'index' %}" class="">Tasks</a></li>
+        <li><a href="{% url 'activities_list_url' %}" class="">Activities</a></li>
+        <li><a href="{% url 'tags_list_url' %}" class="">Tags</a></li>
+        <li><a href="">Create</a>
+          <ul>
+            <li><a href="{% url 'task_create_url' %}" class="">Task</a></li>
+            <li><a href="{% url 'activity_create_url' %}" class="">Acivity</a></li>
+            <li><a href="{% url 'tag_create_url' %}" class="">Tag</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="set-group">
+        <a href="{% url 'logout' %}" class="logout">LogOut</a>
+    </div>
+  </header>
+  <main>
+    <content>
+      {% block content %}
+      {% endblock content %}
+    </content>
+
+    <aside>
+
+    </aside>
+  </main>
+
+<script type="text/javascript" src="{% static 'labor/js/main.js' %}"></script>
+
+{% endblock %}
+
+<!-- базовый шаблон для приложения labor -->

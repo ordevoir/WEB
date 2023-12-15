@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-body">
+        <div class="first-line">
+            <input type="checkbox" class="checkbox">
+            <p class="card-title">{{ task.title }}</p>
+            <div class="options">
+                <!-- <img src="C:\Users\drosophila\Dropbox\WEB\Form\img\main-bg.jpg" alt=""> -->
+                <ul>
+                    <li><a>... options</a></li>
+                    <li><a href="{{ task.get_delete_url }}">... delete</a></li>
+                    <li><a href="{{ task.get_absolute_url }}">... detail</a></li>
+                    <li><a href="{{ task.get_edit_url }}">... edit</a></li>
+                    <li><a>... change status</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="card-discribtion"> {{ task.discribe|truncatewords:5 }}</p>
+        <!-- <p class="card-text">Time <span class="days">{{ task.days }}</span>:<span class="hours">{{ task.hours }}</span>:<span class="minutes">{{ task.minutes }}</span></p> -->
+        <div class="card-timer" data-id="{{ task.id }}">
+            <div class="remain" data-id="{{ task.id }}">
+                <span>remain:</span>
+                <span class="years">{% if 10 > task.years %}0{% endif %}{{ task.years }}</span><span>y</span>
+                <span class="mounths">{% if 10 > task.mounths %}0{% endif %}{{ task.mounths }}</span><span>m</span>
+                <span class="days">{% if 10 > task.days %}0{% endif %}{{ task.days }}</span><span>d</span>
+                <span class="hours">{% if 10 > task.hours %}0{% endif %}{{ task.hours }}</span><span>h</span>
+                <span class="minutes">{% if 10 > task.minutes %}0{% endif %}{{ task.minutes }}</span><span>m</span>
+                <span class="seconds">00</span><span>s</span>
+            </div>
+            <div class="card-buttons">
+                <a class="start" data-id="{{ task.id }}">..</a>
+                <a class="stop">..</a>
+                <a >..</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        {% if task.tags.all %}
+            {% for tag in task.tags.all %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

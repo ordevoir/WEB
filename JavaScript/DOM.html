@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+</head>
+<body>
+    <head></head>
+    <h1 id="headText">This is heading 1</h1>
+    <h2>This is headLine h2 1 ... click here</h2>
+    <h2>This is headLine h2 2 ... click here</h2>
+    <p class="general"><a href="https://developer.mozilla.org/ru/docs/Web/Events" target="_blank">Paragraph</a></p>
+    <p class="general"><a href="https://developer.mozilla.org/ru/docs/Web/Events" target="_blank">Paragraph</a></p>
+    <p class="general"><a href="https://developer.mozilla.org/ru/docs/Web/Events" target="_blank">Paragraph</a></p>
+</body>
+</html>
+
+
+<script>
+
+// получаем доступ по id, переменная heading будет ссылаться на объект
+// из DOM-дерева с id = headText
+let heading = document.getElementById('headText')   // старый способ
+heading = document.querySelector('#headText')   // современный способ
+
+// при использовании getElement указываются просто имена селекторов
+// при использовании querySelector указываются css селекторы
+// так же можно использовать getElementsByClassName для классов
+    
+// далее легко получасть или менять свойства этого объекта:
+heading.style.color = 'blue'
+heading.style.textAlign = 'center'
+console.log('parent:', heading.parentNode)
+console.dir(heading.textContent)
+
+// меняем содержимое h1 с таймере задержкой в 1 с: 
+setTimeout( () => {
+    heading.textContent = 'Chenged Heading'
+}, 1000)
+
+// можно создавать функцию, которая меняет свойства передаваемого объекта
+function addStylesTo(node, fontSize) {
+    node.style.backgroundColor = '#aaa'
+    if (fontSize) {                     // изменение будет в случае
+        node.style.fontSize = fontSize  // если передан второй аргумент
+    }
+}
+// и вызывать ее в таймере, передав объект heading в качестве аргумента
+setTimeout( () => {
+    addStylesTo(heading)
+}, 2000)
+
+let headLine1 = document.getElementsByTagName('h2') // коллекция всех h2
+// если же мы хотим получить конкретный [первый] элемент этой коллекции:
+headLine1 = document.getElementsByTagName('h2')[0]
+console.log('headLine1', headLine1)
+// однако эта функция работает не так быстро, и лучше использовать такие
+// функции как querySelector, querySelectorAll:
+
+headLine1 = document.querySelectorAll('h2')  // коллекция всех h2
+console.log(headLine1)
+headLine1 = document.querySelector('h2') // первый элемент из всех h2
+// следующий элемент коллекции можно будет получить следующим образом:
+headLine2 = headLine1.nextElementSibling
+console.log('headLine2', headLine2)
+
+// получим первый элемент коллекции всех элементов с тэгом <p>
+let paragraph = document.querySelector('.general')  // элемент
+// получим коллекцию всех эелементов с тэгом <p>
+paragraph = document.querySelectorAll('.general')   // коллекция
+console.log(paragraph[0])   // вывод первого элемента с тэгом <p>
+
+// можем вызывать функциb типа querySelector из любого элемента DOM:
+let link = paragraph[1].querySelector('a')  // объект ссылки внутри <p>
+
+
+// Обратотка событий
+
+// https://developer.mozilla.org/ru/docs/Web/Events
+
+// первый способ:
+heading.onclick = () => {
+    if (heading.style.color === 'blue') {
+        heading.style.color = '#333'
+        heading.style.backgroundColor = '#aaa'
+    } else {
+        heading.style.color = 'blue'
+        heading.style.backgroundColor = '#111'
+    }
+}
+
+// второй способ:
+headLine1.style.color = '#333'
+
+headLine1.addEventListener('click', () => {
+    console.log(headLine1.style.color)
+    if (headLine1.style.color === 'rgb(51, 51, 51)') {
+        headLine1.style.color = '#aaa'
+        headLine1.style.backgroundColor = '#333'
+    } else {
+        headLine1.style.color = '#333'
+        headLine1.style.backgroundColor = '#aaa'
+    }
+})
+
+paragraph[0].textContent = 'Справочник по событиям (перестает быть ссылкой)'
+
+// содержимое paragrhaph[0], т.е. содержимое <p> изначально было сыылкой
+// (тегом <a>) с текстом внутри <a>. так что меняя содежимое <p> мы
+// затираем и тег <a> а не только текст. Для того, чтобы изменить текст
+// но при этом оставить ссылку, нужно менять textContent не самого <p>,
+// а его дочернего элемента <a>:
+
+paragraph[1].children[0].textContent = 'Справочник по событиям (остается ссылкой)'
+// или же непосредственно изменить объект <a>, которую мы записали в link
+link.textContent = 'Справочник по событиям (остается ссылкой *)'
+
+// получим третью ссылку в отдельной переменной
+let link3 = paragraph[2].children[0]        // один способ
+link3 = paragraph[2].querySelector('a')     // другой способ
+
+// target.addEventListener(type, listener[, options])
+// addEventListener позволяет отслеживать событие type, связанное с 
+// целевым объектом target, и задавать обработчик listener, в котором 
+// указано, что делать при возникновении события.
+// объект event содержит исчерпывающую информацию о том, что происходило
+// в момент клика: был ли зажат ctrl, координаты мыши, сам target и тд..
+
+link3.addEventListener('click', listener = (event) => {
+    console.log('link 3 Clicked')
+    console.log(event)  // можно посмотреть свойства объекта event 
+    event.preventDefault()  // предотвращает действие по умолчанию
+    // которое заключается в переходе по ссылке, указанной в теге <a>
+    let a = event.target    // a теперь будет ссылаться на тот же объект
+    // на который ссылается link3 (т.е. на целевой объект с тегом <a>)
+    window.location.href = a.href
+    // window.location.href позволяет перейти на страницу с адресом
+    // который ему предоставляется; a указыват на целевой объект
+})
+
+
+
+</script>

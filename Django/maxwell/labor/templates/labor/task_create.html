@@ -1,0 +1,78 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+    Create Post - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'task_create_url' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+
+            {{ form.non_field_errors }} <!-- общие ошибки формы -->
+            <div class="field-wrapper">
+                {{ form.title.errors }}
+                {{ form.title.label_tag}}      <!-- <label> -->
+                {{ form.title }}               <!-- <input> -->
+            </div>
+            <div class="field-wrapper">
+                {{ form.discribe.errors }}
+                {{ form.discribe.label_tag}}    <!-- <label> -->
+                {{ form.discribe }}             <!-- <input> -->
+            </div>
+            <div class="field-wrapper">
+                {{ form.limitation.errors }}
+                {{ form.limitation.label_tag }}
+                {{ form.limitation }}
+            </div>
+            <div id="time-field-wrapper">
+                <div class="field-wrapper">
+                    {{ form.years.errors }}
+                    {{ form.years.label_tag}}    <!-- <label> -->
+                    {{ form.years }}             <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.mounths.errors }}
+                    {{ form.mounths.label_tag}}    <!-- <label> -->
+                    {{ form.mounths }}             <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.days.errors }}
+                    {{ form.days.label_tag}}    <!-- <label> -->
+                    {{ form.days }}             <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.hours.errors }}
+                    {{ form.hours.label_tag}}      <!-- <label> -->
+                    {{ form.hours }}               <!-- <input> -->
+                </div>
+                <div class="field-wrapper">
+                    {{ form.minutes.errors }}
+                    {{ form.minutes.label_tag}}     <!-- <label> -->
+                    {{ form.minutes }}               <!-- <input> -->
+                </div>
+            </div>
+            <div class="field-wrapper">
+                {{ form.tags.errors }}
+                <span>{{ form.tags.label_tag}}</span>
+                <div>{{ form.tags }}</div>
+            <div class="field-wrapper">
+                {{ form.activity.errors }}
+                <span>{{ form.activity.label_tag}}</span>
+                <div>{{ form.activity }}</div>
+            </div>
+            <div class="field-wrapper">
+                {{ form.status.errors }}
+                <span>{{ form.status.label_tag}}</span>
+                <div>{{ form.status }}</div>
+            </div>
+            <div class="field-wrapper">
+                {{ form.superTask.errors }}
+                <span>{{ form.superTask.label_tag}}</span>
+                <div>{{ form.superTask }}</div>
+            </div>
+
+        <button type="submit" name="buton">Create Task</button>
+        </div>
+    </form>
+{% endblock %}

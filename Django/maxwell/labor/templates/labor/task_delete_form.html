@@ -1,0 +1,14 @@
+{% extends 'labor/basic_labor.html' %}
+
+{% block title %}
+    Delete Task "{{ task.title|title }}" - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'task_delete_url' slug=task.slug %}" method="post">
+        {% csrf_token %}
+        <h3>Are you sure you want to delete <b>"{{ task.title|title }}"</b> task?</h3>
+        <a href="{{ task.get_absolute_url }}">Cancel</a>
+        <button type="submit" name="button" class="btn btn-danger">Delete</button>
+    </form>
+{% endblock %}
