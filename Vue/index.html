@@ -9,12 +9,16 @@
 <body>
     <div id="app">
         <div>
-            <span v-for="i in text.length" 
-            :class="{ set_red: (i < 10)}"
+            <span v-for="i in textLine.length" 
+            :class="{ 
+                set_red: (textLine[i-1] !== typedText[i-1] && i-1 < typedText.length),
+                set_green: (textLine[i-1] === typedText[i-1] && i-1 < typedText.length),
+            }"
             >
-                {{ text[i] }}
+                {{ textLine[i-1] }}
             </span>
         </div>
+        <input type="text" v-model="typedText">
     </div>
 </body>
 
@@ -24,11 +28,12 @@
       // Определение данных
       data() {
         return {
-            text: "I always like to see all the possible ways to solve something because then you can choose the best way for your use case. Also, when you see it pop up in someone's codebase, you will understand it with ease",
+            textLine: "splited() { return this.text.split('') }",
+            typedText: "type"
         }
     },
       computed: {
-          splited() { return this.text.split('') },
+        //   typedCount() { return this.}
       },
 
       // Определение методов
@@ -43,8 +48,13 @@
 </script>
 
 <style>
+    .set_green {
+        color: green;
+        background-color: rgb(222, 255, 255);
+    }
     .set_red {
         color: red;
+        background-color: rgb(255, 222, 222);
     }
 </style>
 
