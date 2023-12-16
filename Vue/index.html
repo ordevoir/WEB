@@ -7,23 +7,37 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="app">
-        <div>
-            <span v-for="i in textLine.length" 
-            class="default"
-            :class="{ 
-                set_red: (textLine[i-1] !== typedText[i-1] && i-1 < typedText.length),
-                set_green: (textLine[i-1] === typedText[i-1] && i-1 < typedText.length),
-            }"
-            >
+    <div id="app" class="container">
+
+        <div class="code">
+            
+            <input type="text" 
+            class="code-line code-input mnspce"
+            v-model="typedText" @input="typing"
+            ref="input">
+        
+            <div class="code-line mnspce" @click="focusOnInput">
+                <span v-for="i in textLine.length" 
+                class="symbols"
+                :class="{ 
+                    set_red: (textLine[i-1] !== typedText[i-1] && i-1 < typedText.length),
+                    set_green: (textLine[i-1] === typedText[i-1] && i-1 < typedText.length),
+                }"
+                >
                 {{ textLine[i-1] }}
-            </span>
+                </span>
+            </div>
+
         </div>
-        <input :disabled="isDisabled" type="text" v-model="typedText">
-        <button @click="start">Start</button>
-        <div>{{ remainSeconds }}</div>
+
+        <div class="panel">
+            <button @click="start">Start</button>
+            <div class="remain">{{ remainSeconds }} s</div>
+        </div>
+
     </div>
 </body>
+
 
 <script>
     
@@ -35,11 +49,14 @@
             fullText: "",
             textLine: "",
             typedText: "",
+            prevTypedText: "",
             splittedText: [],
             currentLineIndex: 0,
             isTyping: false,
-            remainSeconds: 10,
-            isDisabled: true,
+            givenSeconds: 60,
+            remainSeconds: 60,
+            totalCount: 0,
+            correctCount: 0,
         }
     },
       computed: {
@@ -47,10 +64,15 @@
       },
 
       mounted() {
-        path = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/tools.py"
+        path = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/datasets/typing.py"
         this.fullText = this.loadFile(path)
-        this.splittedText = this.fullText.split("\n")
-        
+        splittedText = this.fullText.split("\n")
+        splittedText = splittedText.map(line => line.trim())
+        this.splittedText = splittedText.filter(line => {
+            if (line.length > 0 && line.length <= 80) { return true }
+        })
+        shuffle(this.splittedText)
+        // for (let i=0; i<80; i++) {this.textLine += "x"}
       },
 
       // Определение методов
@@ -72,51 +94,157 @@
         },
 
         start() {
+            this.$refs.input.focus()
             if (!this.isTyping) {
                 this.textLine = this.splittedText[0]
-                this.isDisabled = false
-                this.remainSeconds = 10
+                this.remainSeconds = this.givenSeconds
+                this.totalCount = 0
+                this.correctCount = 0
+                this.prevTypedText = ""
             }
         },
-
-      },
-      watch: {
-        typedText: function(newValue, oldValue) {
+        typing() {
+            delta = this.typedText.length - this.prevTypedText.length
+            
             if (!this.isTyping) {
                 this.isTyping = true
                 this.interval = setInterval(() => {this.remainSeconds--}, 1000)
             }
-            if (newValue.length === this.textLine.length) {
-                this.currentLineIndex++
-                this.textLine = this.splittedText[this.currentLineIndex].trim()
-                this.typedText = ""
+            if (delta === 1) {
+                this.totalCount++
+                index = this.typedText.length - 1
+                if (this.typedText[index] === this.textLine[index]) { this.correctCount++ }
             }
+            if (this.typedText.length === this.textLine.length) {
+                this.currentLineIndex++
+                this.textLine = this.splittedText[this.currentLineIndex]
+                this.typedText = ""
+            } else if (delta < 0) {
+                last = this.prevTypedText.length - 1
+                this.totalCount += delta
+                for (let i=0; i>delta; i--) {
+                    if (this.prevTypedText[last+i] == this.textLine[last+i]) {
+                        this.correctCount--
+                    }
+                }
+            }
+            this.prevTypedText = this.typedText
         },
+        focusOnInput(e) {
+            console.log("focusOnInput")
+            if (this.isTyping) { this.$refs.input.focus() }
+        },
+
+      },
+      watch: {
 
         remainSeconds: function(newValue, oldValue) {
             if (this.remainSeconds <= 0) {
                 clearInterval(this.interval)
                 this.isTyping = false
-                this.isDisabled = true
+                this.$refs.input.blur()
+                speed = this.totalCount / (this.givenSeconds / 60)
+                this.textLine = "Finish... " + "Speed: " + speed.toFixed() + " spm"
+                accuracy = (this.correctCount / this.totalCount) * 100
+                this.textLine += ", Accuracy: " + accuracy.toFixed(2) + "%" 
+                this.typedText = ""
             }
         }
       }
     })
 
     app.mount('#app')
+
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+
+  while (currentIndex > 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+}
+
 </script>
 
 <style>
-    .default {
+    body {
+        display: grid;
+        place-items: center;
+        background-color: rgb(42, 42, 42);
+        color: aliceblue;
+    }
+    .container {
+        background-color: rgb(80, 80, 80);
+        padding: 20px;
+        display: grid;
+        place-items: center;
+        justify-self: center;
+        min-width: 700pt;
+        /* height: 300px; */
+        border: 1px black solid;
+        grid-gap: 10px;
+        border-radius: 10px;
+    }
+
+    .code {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        /* border: 1px red solid; */
+    }
+    
+    .code-line {
+        position: relative;
+        padding: 10px;
+        min-height: 20px;
+        border: 1px rgb(26, 26, 26) solid;
+        border-radius: 5px;
+        background-color: rgb(55, 55, 55);
+        color:antiquewhite;
+        grid-row: 1 / 1;
+        grid-column: 1 / 1;
+        
+    }
+
+    .code-line:focus {
+        outline: solid 1px #b1ad53;
+        /* border: 1px red solid; */
+    }
+
+    .symbols {
+        padding: 3px 0px;
+    }
+
+    .mnspce {
+        font-size: 14pt;
         font-family: "Lucida Console", Courier, monospace;;
     }
     .set_green {
-        color: green;
-        background-color: rgb(222, 255, 255);
+        color: rgb(0, 255, 0);
+        background-color: rgb(0, 78, 0);
     }
     .set_red {
         color: red;
-        background-color: rgb(255, 222, 222);
+        background-color: rgb(78, 0, 0);
+    }
+    .panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+    }
+    .remain {
+        padding: 10px;
+    }
+    button {
+        background-color: rgb(82, 82, 82);
+        color: antiquewhite;
+        padding: 5px;
+        border: 2px antiquewhite solid;
+        border-radius: 5px;
+        min-width: 80px;
     }
 </style>
 
