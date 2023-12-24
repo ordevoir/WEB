@@ -8,6 +8,19 @@
 </head>
 <body>
     <div id="app" class="container">
+        <div class="title">
+            <div class="center" :style="{ color: colorCapsLock }">CapsLock</div>
+            <div>
+                <div class="mnspce center" v-show="!inputDisabled && !isTyping">Start typing...</div>
+                <div class="mnspce center" v-show="inputDisabled">Finish!</div>
+                <div class="mnspce center" v-show="!inputDisabled && isTyping">
+                    <span class="set_green mnspce symbols">&nbspcorrect&nbsp</span>
+                    <span>&nbsp</span>
+                    <span class="set_red mnspce symbols" >&nbspwrong&nbsp</span>
+                </div>
+            </div>
+            <div class="remain">{{ remainSeconds }} s</div>
+        </div>
 
         <div class="code">
             
@@ -38,9 +51,7 @@
         </div>
 
         <div class="panel">
-            <div :style="{ color: colorCapsLock }">CapsLock</div>
             <button @click="start" ref="start"> {{isTyping? "Reset" : "SetUp"}} </button>
-            <div class="remain">{{ remainSeconds }} s</div>
 
             <select @change="onSelectChange">
                 <option value="python">Python</option>
@@ -65,13 +76,20 @@
             <input type="text"
             class="mnspce input symbol-set"
             v-model="symbolSet"
-            @keyup.enter="genSeq"
+            @keyup.enter="genSeqFromSymbols"
             >
             <select @change="onSelectMode">
-                <option value="strict">Strict Mode</option>
-                <option value="allow_mistake">Allow Mistakes</option>
                 <option value="allow_correct">Allow Corrections</option>
+                <option value="allow_mistake">Allow Mistakes</option>
+                <option value="strict">Strict Mode</option>
             </select>
+            <div id="words-generate-label">You can define a set of words to generate a sequence</div>
+            <textarea id="words" name="words" rows="3" cols="10" placeholder="Type words separated by a space or new line and press Ctrl+Enter..."
+            v-model="wordsTextArea"
+            @keydown.ctrl.enter="genSeqFromWords"
+            ></textarea>
+            <button @click="genSeqFromWords">Generate</button>
+            <button @click="setPythonKeywords">Python KeyWords</button>
         </div>
 
     </div>
@@ -100,7 +118,7 @@ const ALLOW_CORRECT = "allow_correct"
             textLine: "",
             typedText: "",
             prevTypedText: "",
-            splittedText: [],
+            sequences: [],
             currentLineIndex: 0,
             isTyping: false,
             givenSeconds: 60,
@@ -113,9 +131,10 @@ const ALLOW_CORRECT = "allow_correct"
             colorCapsLock: "gray",
             symbolSet: "{[( )]}",
             corrections: 0,
-            typeMode: STRICT,
+            typeMode: ALLOW_CORRECT,
             mistake: "",
             mistakeCount: 0,
+            wordsTextArea: "",
         }
     },
 
@@ -140,31 +159,31 @@ const ALLOW_CORRECT = "allow_correct"
                 console.log(xhr.status)
             }
         },
-        getSplittedLines(text) {
-            splittedText = text.split("\n")
-            splittedText = splittedText.map(line => line.trim())
-            splittedText = splittedText.filter(line => {
+        getSplittedsequences(text) {
+            sequences = text.split("\n")
+            sequences = sequences.map(line => line.trim())
+            sequences = sequences.filter(line => {
                 if (line.length > 0 && line.length <= 80) { return true }
             })
-            return splittedText
+            return sequences
         },
         updateTextLine() {
             let index = this.wordIndex
-            let line = this.splittedText[index]
+            let line = this.sequences[index]
             while (true) {
                 index++
-                if (line.length + this.splittedText[index].length + 1 >= 80) { break }
-                line += " " + this.splittedText[index]
+                if (line.length + this.sequences[index].length + 1 >= 80) { break }
+                line += " " + this.sequences[index]
             }
             this.textLine = line + " "
             this.wordIndex = index
         },
         getFirstPosition() {
             // выбирает индекс слова, идущего полсле отчки
-            let n = this.splittedText.length - 5000
+            let n = this.sequences.length - 5000
             index = Math.floor(Math.random() * n);
             while (true) {
-                if (this.splittedText[index-1].endsWith(".")) { break }
+                if (this.sequences[index-1].endsWith(".")) { break }
                 index ++
             }
             return index
@@ -177,19 +196,19 @@ const ALLOW_CORRECT = "allow_correct"
             if (this.mode === PYTHON) {
                 path = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/datasets/typing.py      "
                 text = this.loadFile(path)
-                this.splittedText = this.getSplittedLines(text)
-                shuffle(this.splittedText)
-                this.textLine = this.splittedText[0]
+                this.sequences = this.getSplittedsequences(text)
+                shuffle(this.sequences)
+                this.textLine = this.sequences[0]
             } else if (this.mode === TEXT) { 
                 path_rus = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/datasets/text_rus_cleared.txt"
                 path_eng = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/datasets/text_eng_cleared.txt"
                 if (this.language == RUS) { text = this.loadFile(path_rus) }
                 if (this.language == ENG) { text = this.loadFile(path_eng) }
-                this.splittedText = text.split(" ")
+                this.sequences = text.split(" ")
                 this.wordIndex = this.getFirstPosition()
                 this.updateTextLine()
             } else if (this.mode == GENERATE) {
-                this.textLine = this.splittedText[0]
+                this.textLine = this.sequences[0]
             }
             this.inputDisabled = false
             this.$nextTick(() => { this.$refs.input.focus() })
@@ -211,11 +230,13 @@ const ALLOW_CORRECT = "allow_correct"
             if (delta === 1) {
                 let i = this.typedText.length-1
                 let isCorrect = (this.typedText[i] === this.textLine[i])
-                if (!isCorrect) { this.mistakeCount++}
-                if (this.typeMode == STRICT && !isCorrect) {
-                    this.typedText = this.typedText.slice(0, this.typedText.length-1)
+                if (!isCorrect) { 
+                    this.mistakeCount++
                     this.mistake = "mistake"
                     setTimeout(() => { this.mistake = "" }, 200)
+                }
+                if (this.typeMode == STRICT && !isCorrect) {
+                    this.typedText = this.typedText.slice(0, this.typedText.length-1)
                 } else {
                     this.totalCount++
                     index = this.typedText.length - 1
@@ -225,7 +246,7 @@ const ALLOW_CORRECT = "allow_correct"
             if (this.typedText.length === this.textLine.length) {
                 if (this.mode == PYTHON || this.mode == GENERATE) {
                     this.currentLineIndex++
-                    this.textLine = this.splittedText[this.currentLineIndex]
+                    this.textLine = this.sequences[this.currentLineIndex]
                 } else if (this.mode == TEXT) {
                     this.updateTextLine()
                 }
@@ -248,10 +269,17 @@ const ALLOW_CORRECT = "allow_correct"
             // this.$refs.start.focus()
             this.typedText = ""
         },
+
         
-        genSeq() {
+        setPythonKeywords() {
+            path = "https://raw.githubusercontent.com/ordevoir/Miscellaneous/master/datasets/python_keyword.txt      "
+            this.wordsTextArea = this.loadFile(path)
+            this.genSeqFromWords()
+        },
+        
+        genSeqFromSymbols() {
             this.symbolSet = [...new Set(this.symbolSet)].join("")
-            this.splittedText = []
+            this.sequences = []
             for (let i=0; i<100; i++){
                 let line = ""
                 for (let j=0; j<80; j++) {
@@ -262,20 +290,36 @@ const ALLOW_CORRECT = "allow_correct"
                     }
                     line += symbol
                 }
-                this.splittedText.push(line.trim())
+                this.sequences.push(line.trim())
+            }
+            this.mode = GENERATE
+            this.start()
+        },
+        genSeqFromWords() {
+            // замена всех символов переноса строки на пробелы 
+            let words = this.wordsTextArea.trim().replace(/\n|\t/g, ' ').split(/\s+/)
+            this.sequences = []
+            for (let i=0; i<100; i++) {
+                let line = ""
+                while (true) {
+                    rd = Math.floor(Math.random() * words.length)
+                    let word = words[rd]
+                    if (line.length + word.length >= 80) { break }
+                    else { line += word + " "}
+                }
+                this.sequences.push(line)
             }
             this.mode = GENERATE
             this.start()
         },
 
+
         // Обработкичи событий
         // -------------------
         
         onKeyDown(event) {
-            if (event.code === "CapsLock") { 
-                let capsOn = event.getModifierState('CapsLock')
-                this.colorCapsLock = capsOn? "red" : "gray"
-            }
+            let capsOn = event.getModifierState('CapsLock')
+            this.colorCapsLock = capsOn? "orange" : "gray"
         },
         onDelete(event) {
             if (this.typeMode == ALLOW_CORRECT) {
@@ -314,7 +358,7 @@ const ALLOW_CORRECT = "allow_correct"
                 this.inputDisabled = true
                 this.reset()
                 speed = this.totalCount / (this.givenSeconds / 60)
-                this.textLine = "Finish... " + "Speed: " + speed.toFixed() + " spm"
+                this.textLine = "Speed: " + speed.toFixed() + " spm"
                 if (!(this.typeMode == STRICT) && this.totalCount) { 
                     accuracy = (this.correctCount / this.totalCount) * 100
                     this.textLine += ", Accuracy: " + accuracy.toFixed(2) + "%" 
@@ -359,10 +403,15 @@ function shuffle(array) {
         display: grid;
         place-items: center;
         justify-self: center;
-        width: 740pt;
+        width: 800pt;
         border: 1px black solid;
         grid-gap: 10px;
         border-radius: 10px;
+    }
+    .title {
+        display: grid;
+        grid-template-columns: 1fr 10fr 1fr;
+        width: 100%;
     }
     .input {
         border: 1px rgb(26, 26, 26) solid;
@@ -400,9 +449,12 @@ function shuffle(array) {
     .symbols {
         padding: 3px 0px;
     }
+    .center {
+        text-align: center;
+    }
 
     .mnspce {
-        font-size: 14pt;
+        font-size: 16pt;
         font-family: "Lucida Console", Courier, monospace;;
     }
     .set_green {
@@ -462,7 +514,7 @@ function shuffle(array) {
         border: none;
         background-color: #f1f1f1;
     }
-    .symbol-set {
+    /* .symbol-set {
         max-width: 175px;
         padding-right: 15px;
     }
@@ -480,10 +532,17 @@ function shuffle(array) {
         color:#e9ecef;   
     }
     .unchecked {
-        /* background-color: green;
-        border: 1px solid rgb(151, 252, 0); */
         color:gray;
+    } */
+
+    #words-generate-label {
+        grid-column: 1 / 4;
     }
+    #words {
+        grid-column: 4 / 9;
+        width: 100%;
+    }
+    
 </style>
 
 </html>
