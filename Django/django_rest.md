@@ -113,3 +113,58 @@ return Response(serializer.data, status=status.HTTP_201_CREATED)
 - `HTTP_201_CREATED`
 - `HTTP_204_NO_CONTENT`
 - `HTTP_400_BAD_REQUEST`
+
+# Тестирование API
+
+## Тестирование в браузере
+
+Один из способов взаимодействия с API – использовать браузер. Если открыть в браузере URL, по локальному сереверу с хостом 8000 (например, `localhost:8000/labor/tasks/3`), то Django REST предоставит WEB интерфейс, для того, чтобы производить запросы и видеть получемые ответы.
+
+Здесь, однако, может возникнуть некоторая проблема, если уже настроена система аутентификации: клиент в данном случае будет идентифицирован как `AnonymousUser`, и если требуется `id` пользователя, для того, чтобы взаимодействовать с БД, то возникнет ошибка:
+
+    Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object ...>
+
+
+Решить эту проблему можно допустив в модели существование пустого значения в поле пользователя, задав параметр `null=True`:
+
+```python
+class Task(models.Model):
+    ...
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE, related_name='tasks')
+    ...
+```
+
+Тогда, в контроллерах можно использовать значение `None` для объекта пользователя, если аутентификация не была произведена. Фактически это будет эквивалентно существованию ползователя `AnonymousUser`, но вместо его `id` или `username` будет в базе будет записано значение `NULL`.
+
+Для того, чтобы проверить, была ли произведена аутентификация, можно посмотреть поле `is_authenticated` объекта пользователя, полученного из запроса. Используя условное выражение, можно присовить имени `user` объект пользователя, если аутентификация произведена, либо `None` в противном случае.
+
+```python
+    def get(self, request):
+        user = request.user if request.user.is_authenticated else None
+        tasks = Task.objects.filter(user=user)
+        serializer = TaskSerializer(tasks, many=True)
+```
+
+## Тестирование с `requests`
+
+Тестирование можно производить при помощи модуля `requests`:
+
+```python 
+import requests 
+
+url = "http://localhost:8000/labor/tasks/"
+
+response = requests.get(url)
+
+print(response.status_code)
+print(response.json())
+
+```
+
+При этом можно использовать токен, для аутентификации (если он уже получен):
+
+```python 
+token = "83c810fceb622802218cc98748f5b0b23d0a1cef"
+response = requests.get(url, headers={"Authorization": f"Token {token}"})
+```
+
