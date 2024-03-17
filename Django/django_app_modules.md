@@ -269,8 +269,11 @@ router.register(r'actions', ActionViewSet, basename="action")
 
 >Подробнее о том, как налаживать маршруты для ViewSets в разделе `routers`
 
+## [Generic Views](https://www.django-rest-framework.org/api-guide/generic-views/)
 
+Классы ViewSets предоставляют полный набор обработки запросов, которые уже реализованы по умолчанию в классе. Клас `APIView`, напротив, предполагает самостоятельное определение методов для соответствующих типов запросов. Django REST framework также предоставлят классы Generic Views, позволяющие быстро создавать контроллеры, которые позволяют обрабатывать определенный тип запроса. Например, для создания записи используется [`CreateAPIView`](https://www.django-rest-framework.org/api-guide/generic-views/#createapiview), для чтения записи используется [`RetrieveAPIView`](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) и тд. Списко классов описан [здесь](https://www.django-rest-framework.org/api-guide/generic-views/#concrete-view-classes).
 
+Используя [миксины](https://www.django-rest-framework.org/api-guide/generic-views/#mixins), можно создавать собственные классы Generic Views.
 
 # [Serializers](https://www.django-rest-framework.org/api-guide/serializers/)
 
@@ -461,3 +464,5 @@ urlpatterns = [
 ```
 
 В контроллере могут быть определены и другие действия, помимо стандартных. Для того, чтобы обеспечить их маршрутами, воспользуйтейсь [инструкцией в документации](https://www.django-rest-framework.org/api-guide/routers/#routing-for-extra-actions). 
+
+
