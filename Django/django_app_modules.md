@@ -269,6 +269,14 @@ router.register(r'actions', ActionViewSet, basename="action")
 
 >Подробнее о том, как налаживать маршруты для ViewSets в разделе `routers`
 
+При получении POST запроса, необходимо передать в сериализатор дополнительно идентификатор пользователя. Это поле не содержится в JSON, и необходимо извлекать его из запроса. Для этой цели можно переопределить метод `perform_create()` контроллера:
+
+```python
+    def perform_create(self, serializer):
+        user = self.request.user if self.request.user.is_authenticated else None
+        serializer.save(user=user)
+```
+
 ## [Generic Views](https://www.django-rest-framework.org/api-guide/generic-views/)
 
 Классы ViewSets предоставляют полный набор обработки запросов, которые уже реализованы по умолчанию в классе. Клас `APIView`, напротив, предполагает самостоятельное определение методов для соответствующих типов запросов. Django REST framework также предоставлят классы Generic Views, позволяющие быстро создавать контроллеры, которые позволяют обрабатывать определенный тип запроса. Например, для создания записи используется [`CreateAPIView`](https://www.django-rest-framework.org/api-guide/generic-views/#createapiview), для чтения записи используется [`RetrieveAPIView`](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) и тд. Списко классов описан [здесь](https://www.django-rest-framework.org/api-guide/generic-views/#concrete-view-classes).
