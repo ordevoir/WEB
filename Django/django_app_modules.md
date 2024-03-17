@@ -263,8 +263,11 @@ class ActionList(viewsets.ModelViewSet):
 
 Заметим, что при этом мы не определяем поле `queryset`. В таких случаях, при регистрации контроллера в `router`, необходимо здать именованный параметр `basename`:
 
-router.register(r'actions', ActionList, basename="Action")
+```
+router.register(r'actions', ActionViewSet, basename="action")
+```
 
+>Подробнее о том, как налаживать маршруты для ViewSets в разделе `routers`
 
 
 
@@ -427,3 +430,34 @@ urlpatterns = [
     path('rest-auth/registration', include('dj_rest_auth.registration.urls')),
 ]
 ```
+
+## `routers`
+
+Классы `SimpleRouter` и `DefaultRouter` из модуля `routers` позволяют автоматизированно генерировать маршруты для контроллеров ViewSets. Пусть у нас есть контроллер `ActionViewSet`, который наследует класс `ModelViewSet`. Зарегистрируем этот контроллер:
+
+```python
+from rest_framework.routers import SimpleRouter
+from .views import ActionList
+
+router.register(prefix=r'actions', viewset=ActionViewSet)
+```
+
+Этот маршртуизатор сгенерирует маршруты как для непараметризированного так и для параметризированного маршрута в виде списка объектов класса `URLPattern`. Можно также зарегистрировать множество других контроллеров, вызывая меотд `register()`. Список будет доступен в поле `urls`. В методе `register()` определяются следующие аргументы:
+
+- `prefix` – префикс URL для данного набора паршрутов;
+- `viewset` – класс ViewSet`a;
+
+Есть также третий необязательный аргумент `basename`, в котором можно определить основу имен маршрутов. Например, если задать `basename="act"`, то будут сгенерированы такие имена маршрутов: `act-list` для непараметризованного маршрута, `act-detail` – для параметризованного.
+
+По-умолчанию это значение устанавливается автоматически на основе поля `queryset` контроллера. Но если в контроллере был использован метод `get_queryset()`, то контроллер может не иметь поля `queryset`, и при регистрации такого ViewSet произойдет ошибка (при попытке найти это поле у класса). В таких случаях надо явно определять параметр `basename`.
+
+После того, как контроллер зарегистрирован, его маршруты нужно [добавить в список `urlpatterns`](https://www.django-rest-framework.org/api-guide/routers/#using-include-with-routers). Так как элементы списка `urlpatterns` того же типа, что и в списке `router.urls`, поэтому можно добавить маршруты инструкцией `urlpatterns += router.urls`. Кроме того, можно добавить пути функцией `include()`:
+
+```python
+urlpatterns = [
+    ...
+    path('', include(router.urls)),
+]
+```
+
+В контроллере могут быть определены и другие действия, помимо стандартных. Для того, чтобы обеспечить их маршрутами, воспользуйтейсь [инструкцией в документации](https://www.django-rest-framework.org/api-guide/routers/#routing-for-extra-actions). 
