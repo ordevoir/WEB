@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XHR</title>
+</head>
+<body>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script src="XMLHttpRequest.js"></script> -->
+</body>
+</html>
+
+<script>
+
+// Для того, чтобы понять, что меняется при использовании оператора await,
+// Сравнить выводы в консоль в двух вариантах (с await и без)Ж
+
+async function f() {
+    console.log("in the funciotn: before")
+    let p = axios.get("https://www.progarchives.com/")
+    // let p = await axios.get("https://www.progarchives.com/")
+        .then(response => {
+            console.log("in the axios")
+        })
+    console.log("in the funciotn: after")
+    return 3 + 4
+}
+
+console.log("before")
+let p = f()
+p.then(() => {console.log("p: ", p)})
+console.log("after")
+console.log("p = ", p)
+
+</script>
